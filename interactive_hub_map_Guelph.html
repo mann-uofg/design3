@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_52acb9557d4b6e4ab041bfa679bebc75 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_52acb9557d4b6e4ab041bfa679bebc75" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_52acb9557d4b6e4ab041bfa679bebc75 = L.map(
+                "map_52acb9557d4b6e4ab041bfa679bebc75",
+                {
+                    center: [43.549999, -80.25],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 12,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_e86743659606fc7c0de4882f117568b1 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_e86743659606fc7c0de4882f117568b1.addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+            var circle_marker_7c54b4c15f2240643e1fa071773a21d2 = L.circleMarker(
+                [43.5535479, -80.2348729],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_0444d2ce2dc4b7915eff6c46b699d2da = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_ac37e975bb0d855003c78cb19b491c36 = $(`<div id="html_ac37e975bb0d855003c78cb19b491c36" style="width: 100.0%; height: 100.0%;">Angelino's Fresh Choice Market - 16 Stevenson St S</div>`)[0];
+                popup_0444d2ce2dc4b7915eff6c46b699d2da.setContent(html_ac37e975bb0d855003c78cb19b491c36);
+            
+        
+
+        circle_marker_7c54b4c15f2240643e1fa071773a21d2.bindPopup(popup_0444d2ce2dc4b7915eff6c46b699d2da)
+        ;
+
+        
+    
+    
+            circle_marker_7c54b4c15f2240643e1fa071773a21d2.bindTooltip(
+                `<div>
+                     Angelino's Fresh Choice Market - 16 Stevenson St S
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0e95aa3aca1d961576ce540e0cc288a0 = L.circleMarker(
+                [43.5448674, -80.2528323],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_bb3dbe70ff9851c00dbf6e7bad7d3c22 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_8470d248e415cf2e3d04ba219fd736c2 = $(`<div id="html_8470d248e415cf2e3d04ba219fd736c2" style="width: 100.0%; height: 100.0%;">Market Fresh - 10 Paisley St</div>`)[0];
+                popup_bb3dbe70ff9851c00dbf6e7bad7d3c22.setContent(html_8470d248e415cf2e3d04ba219fd736c2);
+            
+        
+
+        circle_marker_0e95aa3aca1d961576ce540e0cc288a0.bindPopup(popup_bb3dbe70ff9851c00dbf6e7bad7d3c22)
+        ;
+
+        
+    
+    
+            circle_marker_0e95aa3aca1d961576ce540e0cc288a0.bindTooltip(
+                `<div>
+                     Market Fresh - 10 Paisley St
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_6db4f9a05ddb842ca6e19cbdff58f548 = L.circleMarker(
+                [43.5516773, -80.2211858],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_d5d99ae47c328b0ccf8cd65e6fcc77b5 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_838e5a91c480dcbed98b52d325bd5ed5 = $(`<div id="html_838e5a91c480dcbed98b52d325bd5ed5" style="width: 100.0%; height: 100.0%;">Ethnic Supermarket - 234 Victoria Rd S</div>`)[0];
+                popup_d5d99ae47c328b0ccf8cd65e6fcc77b5.setContent(html_838e5a91c480dcbed98b52d325bd5ed5);
+            
+        
+
+        circle_marker_6db4f9a05ddb842ca6e19cbdff58f548.bindPopup(popup_d5d99ae47c328b0ccf8cd65e6fcc77b5)
+        ;
+
+        
+    
+    
+            circle_marker_6db4f9a05ddb842ca6e19cbdff58f548.bindTooltip(
+                `<div>
+                     Ethnic Supermarket - 234 Victoria Rd S
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a3e6c33b5a8092354c9c441f1aa7fdb5 = L.circleMarker(
+                [43.5420079, -80.2444236],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_79bceb15e172f061b57525e5d91bdb55 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_272d0bf72b36fd561746ce7d9b61de0d = $(`<div id="html_272d0bf72b36fd561746ce7d9b61de0d" style="width: 100.0%; height: 100.0%;">Goodness Me! Natural Food Market - 36 Wellington St W</div>`)[0];
+                popup_79bceb15e172f061b57525e5d91bdb55.setContent(html_272d0bf72b36fd561746ce7d9b61de0d);
+            
+        
+
+        circle_marker_a3e6c33b5a8092354c9c441f1aa7fdb5.bindPopup(popup_79bceb15e172f061b57525e5d91bdb55)
+        ;
+
+        
+    
+    
+            circle_marker_a3e6c33b5a8092354c9c441f1aa7fdb5.bindTooltip(
+                `<div>
+                     Goodness Me! Natural Food Market - 36 Wellington St W
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b01630a310e7b8d700c8872518b37202 = L.circleMarker(
+                [43.5452532, -80.2888985],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_a9b844c058bbf7fb4aa38b460a33849d = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d0104afb963f0b161ba1c3d58e41d31b = $(`<div id="html_d0104afb963f0b161ba1c3d58e41d31b" style="width: 100.0%; height: 100.0%;">Than Phat Asian Grocer - 252 Silvercreek Pkwy N</div>`)[0];
+                popup_a9b844c058bbf7fb4aa38b460a33849d.setContent(html_d0104afb963f0b161ba1c3d58e41d31b);
+            
+        
+
+        circle_marker_b01630a310e7b8d700c8872518b37202.bindPopup(popup_a9b844c058bbf7fb4aa38b460a33849d)
+        ;
+
+        
+    
+    
+            circle_marker_b01630a310e7b8d700c8872518b37202.bindTooltip(
+                `<div>
+                     Than Phat Asian Grocer - 252 Silvercreek Pkwy N
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_61bc17216105b793b8d62f011a0ca351 = L.circleMarker(
+                [43.5433014, -80.2846749],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_e26f2218b81870bd5e566f1a3b68ac8a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_ad07309c43f307c5a7ae3ade041598eb = $(`<div id="html_ad07309c43f307c5a7ae3ade041598eb" style="width: 100.0%; height: 100.0%;">Guelph Butcher & Grocers (Asian Food Land) - 219 Silvercreek Pkwy N</div>`)[0];
+                popup_e26f2218b81870bd5e566f1a3b68ac8a.setContent(html_ad07309c43f307c5a7ae3ade041598eb);
+            
+        
+
+        circle_marker_61bc17216105b793b8d62f011a0ca351.bindPopup(popup_e26f2218b81870bd5e566f1a3b68ac8a)
+        ;
+
+        
+    
+    
+            circle_marker_61bc17216105b793b8d62f011a0ca351.bindTooltip(
+                `<div>
+                     Guelph Butcher & Grocers (Asian Food Land) - 219 Silvercreek Pkwy N
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_804d9073c7b734d5c52b8fa9c3a16d7e = L.circleMarker(
+                [43.5467217, -80.249485],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_1ccae62d14003c3f692184aeab71283a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_a200d571f644fb3fc071a57a99b2fd01 = $(`<div id="html_a200d571f644fb3fc071a57a99b2fd01" style="width: 100.0%; height: 100.0%;">Jans Guelph Latin Market - 101 Wyndham St N (Unit 1)</div>`)[0];
+                popup_1ccae62d14003c3f692184aeab71283a.setContent(html_a200d571f644fb3fc071a57a99b2fd01);
+            
+        
+
+        circle_marker_804d9073c7b734d5c52b8fa9c3a16d7e.bindPopup(popup_1ccae62d14003c3f692184aeab71283a)
+        ;
+
+        
+    
+    
+            circle_marker_804d9073c7b734d5c52b8fa9c3a16d7e.bindTooltip(
+                `<div>
+                     Jans Guelph Latin Market - 101 Wyndham St N (Unit 1)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_554a074c9f35e01f747f21bfea3ee1b5 = L.circleMarker(
+                [43.5414159, -80.2487314],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_7c030b87758a66c3df607043615d67f4 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_093ea33a1e55d8a2faeb6b5179b899fd = $(`<div id="html_093ea33a1e55d8a2faeb6b5179b899fd" style="width: 100.0%; height: 100.0%;">SAFA Middle Eastern Market - 16 Essex St</div>`)[0];
+                popup_7c030b87758a66c3df607043615d67f4.setContent(html_093ea33a1e55d8a2faeb6b5179b899fd);
+            
+        
+
+        circle_marker_554a074c9f35e01f747f21bfea3ee1b5.bindPopup(popup_7c030b87758a66c3df607043615d67f4)
+        ;
+
+        
+    
+    
+            circle_marker_554a074c9f35e01f747f21bfea3ee1b5.bindTooltip(
+                `<div>
+                     SAFA Middle Eastern Market - 16 Essex St
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_725716cb455eb8688d3c9fbac3a6bc10 = L.circleMarker(
+                [43.54523, -80.2498769],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_31d9779bce87605440db2d0caa0c82dd = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_ad811527df9a6a47a187cbcc2a2abedc = $(`<div id="html_ad811527df9a6a47a187cbcc2a2abedc" style="width: 100.0%; height: 100.0%;">Trotters Butcher Shop & Market - 42 Cork St E</div>`)[0];
+                popup_31d9779bce87605440db2d0caa0c82dd.setContent(html_ad811527df9a6a47a187cbcc2a2abedc);
+            
+        
+
+        circle_marker_725716cb455eb8688d3c9fbac3a6bc10.bindPopup(popup_31d9779bce87605440db2d0caa0c82dd)
+        ;
+
+        
+    
+    
+            circle_marker_725716cb455eb8688d3c9fbac3a6bc10.bindTooltip(
+                `<div>
+                     Trotters Butcher Shop & Market - 42 Cork St E
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_10f12cdd6175b770212c20ab7db467c8 = L.circleMarker(
+                [43.5405126, -80.2828799],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_d8b88a301d5e96f5c131aae52159bf8e = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_f24dbc7ab936238e4cbd6354e4102655 = $(`<div id="html_f24dbc7ab936238e4cbd6354e4102655" style="width: 100.0%; height: 100.0%;">The Indian Supermarket - 170 Silvercreek Pkwy N</div>`)[0];
+                popup_d8b88a301d5e96f5c131aae52159bf8e.setContent(html_f24dbc7ab936238e4cbd6354e4102655);
+            
+        
+
+        circle_marker_10f12cdd6175b770212c20ab7db467c8.bindPopup(popup_d8b88a301d5e96f5c131aae52159bf8e)
+        ;
+
+        
+    
+    
+            circle_marker_10f12cdd6175b770212c20ab7db467c8.bindTooltip(
+                `<div>
+                     The Indian Supermarket - 170 Silvercreek Pkwy N
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ba44d98cf9cf406254955e788bd372b5 = L.circleMarker(
+                [43.5421582, -80.2899005],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_cf93df86cbc5704b184ab7cbe1171ea0 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_f579e67f467f7ebd621af4c769ff0ef0 = $(`<div id="html_f579e67f467f7ebd621af4c769ff0ef0" style="width: 100.0%; height: 100.0%;">India Spice House - 336 Speedvale Ave W</div>`)[0];
+                popup_cf93df86cbc5704b184ab7cbe1171ea0.setContent(html_f579e67f467f7ebd621af4c769ff0ef0);
+            
+        
+
+        circle_marker_ba44d98cf9cf406254955e788bd372b5.bindPopup(popup_cf93df86cbc5704b184ab7cbe1171ea0)
+        ;
+
+        
+    
+    
+            circle_marker_ba44d98cf9cf406254955e788bd372b5.bindTooltip(
+                `<div>
+                     India Spice House - 336 Speedvale Ave W
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ac7af4057fd0efb3772d2c6b8ca517dc = L.circleMarker(
+                [43.5329643, -80.2878401],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_b6a59fdfade53409cbd4800d3e66a72e = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_4fbc160628e3e943b6a50a935c4020fa = $(`<div id="html_4fbc160628e3e943b6a50a935c4020fa" style="width: 100.0%; height: 100.0%;">Quality Indian Foods & Spices - 500 Willow Rd (Unit 8)</div>`)[0];
+                popup_b6a59fdfade53409cbd4800d3e66a72e.setContent(html_4fbc160628e3e943b6a50a935c4020fa);
+            
+        
+
+        circle_marker_ac7af4057fd0efb3772d2c6b8ca517dc.bindPopup(popup_b6a59fdfade53409cbd4800d3e66a72e)
+        ;
+
+        
+    
+    
+            circle_marker_ac7af4057fd0efb3772d2c6b8ca517dc.bindTooltip(
+                `<div>
+                     Quality Indian Foods & Spices - 500 Willow Rd (Unit 8)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f4de7768cbdf1ce83c912f9d4901e74f = L.circleMarker(
+                [43.5446701, -80.260488],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_7e149f2f23d54f62a7eca543e89775cb = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_4609d5de2471e894cf8cb3e766aa5121 = $(`<div id="html_4609d5de2471e894cf8cb3e766aa5121" style="width: 100.0%; height: 100.0%;">Valeriote's Market & Butchery - 204 Yorkshire St N</div>`)[0];
+                popup_7e149f2f23d54f62a7eca543e89775cb.setContent(html_4609d5de2471e894cf8cb3e766aa5121);
+            
+        
+
+        circle_marker_f4de7768cbdf1ce83c912f9d4901e74f.bindPopup(popup_7e149f2f23d54f62a7eca543e89775cb)
+        ;
+
+        
+    
+    
+            circle_marker_f4de7768cbdf1ce83c912f9d4901e74f.bindTooltip(
+                `<div>
+                     Valeriote's Market & Butchery - 204 Yorkshire St N
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_60ba510b67a89aab8d6306e2a331cc5c = L.circleMarker(
+                [43.5445286, -80.2520597],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_2756a1a088c2b326f1df0963b95b8eea = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_a9c11c2d5015fdfcb22c2d0d2db074a4 = $(`<div id="html_a9c11c2d5015fdfcb22c2d0d2db074a4" style="width: 100.0%; height: 100.0%;">The Stone Store - 14 Commercial St</div>`)[0];
+                popup_2756a1a088c2b326f1df0963b95b8eea.setContent(html_a9c11c2d5015fdfcb22c2d0d2db074a4);
+            
+        
+
+        circle_marker_60ba510b67a89aab8d6306e2a331cc5c.bindPopup(popup_2756a1a088c2b326f1df0963b95b8eea)
+        ;
+
+        
+    
+    
+            circle_marker_60ba510b67a89aab8d6306e2a331cc5c.bindTooltip(
+                `<div>
+                     The Stone Store - 14 Commercial St
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d908cf819ed4c068ab2108f1dfa597a8 = L.circleMarker(
+                [43.5470321, -80.2496353],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_41f6c246b1adf97eae6f9a692c70e57f = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_440b6bf66f074db2811c52fb819d6fb5 = $(`<div id="html_440b6bf66f074db2811c52fb819d6fb5" style="width: 100.0%; height: 100.0%;">The Flour Barrel - 115 Wyndham St N</div>`)[0];
+                popup_41f6c246b1adf97eae6f9a692c70e57f.setContent(html_440b6bf66f074db2811c52fb819d6fb5);
+            
+        
+
+        circle_marker_d908cf819ed4c068ab2108f1dfa597a8.bindPopup(popup_41f6c246b1adf97eae6f9a692c70e57f)
+        ;
+
+        
+    
+    
+            circle_marker_d908cf819ed4c068ab2108f1dfa597a8.bindTooltip(
+                `<div>
+                     The Flour Barrel - 115 Wyndham St N
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_8f4bfe7b4a0742b305159c86c03753c2 = L.circleMarker(
+                [43.5536731, -80.2317836],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_2b7bbc5ff3d2acc6be51e6cc4b90680a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_ea0f3c2961f603187d7ef77a801be610 = $(`<div id="html_ea0f3c2961f603187d7ef77a801be610" style="width: 100.0%; height: 100.0%;">Bella Roma Foods - 37 Empire St</div>`)[0];
+                popup_2b7bbc5ff3d2acc6be51e6cc4b90680a.setContent(html_ea0f3c2961f603187d7ef77a801be610);
+            
+        
+
+        circle_marker_8f4bfe7b4a0742b305159c86c03753c2.bindPopup(popup_2b7bbc5ff3d2acc6be51e6cc4b90680a)
+        ;
+
+        
+    
+    
+            circle_marker_8f4bfe7b4a0742b305159c86c03753c2.bindTooltip(
+                `<div>
+                     Bella Roma Foods - 37 Empire St
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_9684ea9d8932f3bf298aadc0fbee515d = L.circleMarker(
+                [43.5447035, -80.2384397],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_1a67c41d7d01eaf7a1bcaff59ae656b8 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_3aeb186c15881ff40cbef7e31b270622 = $(`<div id="html_3aeb186c15881ff40cbef7e31b270622" style="width: 100.0%; height: 100.0%;">Sugo Mercato - 60 Ontario St</div>`)[0];
+                popup_1a67c41d7d01eaf7a1bcaff59ae656b8.setContent(html_3aeb186c15881ff40cbef7e31b270622);
+            
+        
+
+        circle_marker_9684ea9d8932f3bf298aadc0fbee515d.bindPopup(popup_1a67c41d7d01eaf7a1bcaff59ae656b8)
+        ;
+
+        
+    
+    
+            circle_marker_9684ea9d8932f3bf298aadc0fbee515d.bindTooltip(
+                `<div>
+                     Sugo Mercato - 60 Ontario St
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_cb7db96b4a6a66f8b6a2b807395203a8 = L.circleMarker(
+                [43.5491387, -80.2941626],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_d1325f6f93a60e07c64e32de03680dd1 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_9262d7026a1d504155ddcae5a6079037 = $(`<div id="html_9262d7026a1d504155ddcae5a6079037" style="width: 100.0%; height: 100.0%;">Fresh Box Market - 410 Silvercreek Pkwy N</div>`)[0];
+                popup_d1325f6f93a60e07c64e32de03680dd1.setContent(html_9262d7026a1d504155ddcae5a6079037);
+            
+        
+
+        circle_marker_cb7db96b4a6a66f8b6a2b807395203a8.bindPopup(popup_d1325f6f93a60e07c64e32de03680dd1)
+        ;
+
+        
+    
+    
+            circle_marker_cb7db96b4a6a66f8b6a2b807395203a8.bindTooltip(
+                `<div>
+                     Fresh Box Market - 410 Silvercreek Pkwy N
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0dab11b500b0288984ea3a756cd2ddaa = L.circleMarker(
+                [43.5969091, -80.2098592],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_5fd63572ff5cd7d3966f7346560a8114 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_aa78315bb595a024960ee9e1ff58917e = $(`<div id="html_aa78315bb595a024960ee9e1ff58917e" style="width: 100.0%; height: 100.0%;">Wellington Country Marketplace - 5259 Jones Baseline</div>`)[0];
+                popup_5fd63572ff5cd7d3966f7346560a8114.setContent(html_aa78315bb595a024960ee9e1ff58917e);
+            
+        
+
+        circle_marker_0dab11b500b0288984ea3a756cd2ddaa.bindPopup(popup_5fd63572ff5cd7d3966f7346560a8114)
+        ;
+
+        
+    
+    
+            circle_marker_0dab11b500b0288984ea3a756cd2ddaa.bindTooltip(
+                `<div>
+                     Wellington Country Marketplace - 5259 Jones Baseline
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_1694e06aae51bef0f468825361770172 = L.circleMarker(
+                [43.5206265, -80.211144],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_a513033c3e1f4c5f84905b879b7b4a7e = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_8779fac11c69f717bbd3bdc894f52656 = $(`<div id="html_8779fac11c69f717bbd3bdc894f52656" style="width: 100.0%; height: 100.0%;">Rowe Farms - 1027 Gordon St</div>`)[0];
+                popup_a513033c3e1f4c5f84905b879b7b4a7e.setContent(html_8779fac11c69f717bbd3bdc894f52656);
+            
+        
+
+        circle_marker_1694e06aae51bef0f468825361770172.bindPopup(popup_a513033c3e1f4c5f84905b879b7b4a7e)
+        ;
+
+        
+    
+    
+            circle_marker_1694e06aae51bef0f468825361770172.bindTooltip(
+                `<div>
+                     Rowe Farms - 1027 Gordon St
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_c14321fec78bfa67890f91c3dbb16715 = L.circleMarker(
+                [43.521918, -80.212531],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_73eba011dbb03d620f3c5fdb6536b363 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_9e8d42187bdc9dece3df1c1c6174d6d2 = $(`<div id="html_9e8d42187bdc9dece3df1c1c6174d6d2" style="width: 100.0%; height: 100.0%;">University Square Bakery & Deli - 987 Gordon St</div>`)[0];
+                popup_73eba011dbb03d620f3c5fdb6536b363.setContent(html_9e8d42187bdc9dece3df1c1c6174d6d2);
+            
+        
+
+        circle_marker_c14321fec78bfa67890f91c3dbb16715.bindPopup(popup_73eba011dbb03d620f3c5fdb6536b363)
+        ;
+
+        
+    
+    
+            circle_marker_c14321fec78bfa67890f91c3dbb16715.bindTooltip(
+                `<div>
+                     University Square Bakery & Deli - 987 Gordon St
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b52bc167894fed38d9df2f392bbcaf0c = L.circleMarker(
+                [43.4759953, -80.1571218],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+        var popup_c639d182986d5d35d5012494ee9d5d87 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_01b23eaddac55df3fc4e2d70ba6a1b41 = $(`<div id="html_01b23eaddac55df3fc4e2d70ba6a1b41" style="width: 100.0%; height: 100.0%;">Strom's Farm & Bakery - 5089 Wellington Rd 32</div>`)[0];
+                popup_c639d182986d5d35d5012494ee9d5d87.setContent(html_01b23eaddac55df3fc4e2d70ba6a1b41);
+            
+        
+
+        circle_marker_b52bc167894fed38d9df2f392bbcaf0c.bindPopup(popup_c639d182986d5d35d5012494ee9d5d87)
+        ;
+
+        
+    
+    
+            circle_marker_b52bc167894fed38d9df2f392bbcaf0c.bindTooltip(
+                `<div>
+                     Strom's Farm & Bakery - 5089 Wellington Rd 32
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_b9b3b3ae0e8f5a8d151f3892cd549ec1 = L.marker(
+                [43.547911210526316, -80.2564226263158],
+                {
+}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+            var icon_fdd3c47f6432ff92ec480aa44ffc5ffe = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1e1681314a3e737607eb3130f363451e = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_45934606ab2b1210ea1600f9d81cdea4 = $(`<div id="html_45934606ab2b1210ea1600f9d81cdea4" style="width: 100.0%; height: 100.0%;">Hub 1</div>`)[0];
+                popup_1e1681314a3e737607eb3130f363451e.setContent(html_45934606ab2b1210ea1600f9d81cdea4);
+            
+        
+
+        marker_b9b3b3ae0e8f5a8d151f3892cd549ec1.bindPopup(popup_1e1681314a3e737607eb3130f363451e)
+        ;
+
+        
+    
+    
+                marker_b9b3b3ae0e8f5a8d151f3892cd549ec1.setIcon(icon_fdd3c47f6432ff92ec480aa44ffc5ffe);
+            
+    
+            var circle_76b2e8ca4e49e147e3be7d255c313e2e = L.circle(
+                [43.547911210526316, -80.2564226263158],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5000, "stroke": true, "weight": 2}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+            var marker_bb9ba3e2f9bf050fd144c35a14934a09 = L.marker(
+                [43.506179933333335, -80.19359893333333],
+                {
+}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+    
+            var icon_2e848e9cc81b944af951431ae22d558f = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_440f1e5fcae9980ac21344a92307eb5e = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_374fc78230b4d8d742dbe9c4648aee47 = $(`<div id="html_374fc78230b4d8d742dbe9c4648aee47" style="width: 100.0%; height: 100.0%;">Hub 2</div>`)[0];
+                popup_440f1e5fcae9980ac21344a92307eb5e.setContent(html_374fc78230b4d8d742dbe9c4648aee47);
+            
+        
+
+        marker_bb9ba3e2f9bf050fd144c35a14934a09.bindPopup(popup_440f1e5fcae9980ac21344a92307eb5e)
+        ;
+
+        
+    
+    
+                marker_bb9ba3e2f9bf050fd144c35a14934a09.setIcon(icon_2e848e9cc81b944af951431ae22d558f);
+            
+    
+            var circle_38d230f00eb547861b632d3bff1393c1 = L.circle(
+                [43.506179933333335, -80.19359893333333],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "green", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5000, "stroke": true, "weight": 2}
+            ).addTo(map_52acb9557d4b6e4ab041bfa679bebc75);
+        
+</script>
+</html>
