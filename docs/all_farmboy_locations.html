@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_361fb2678d6d1ca83dd1d4c68d651ad3 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_361fb2678d6d1ca83dd1d4c68d651ad3" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_361fb2678d6d1ca83dd1d4c68d651ad3 = L.map(
+                "map_361fb2678d6d1ca83dd1d4c68d651ad3",
+                {
+                    center: [44.5, -79.5],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 7,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_d62271531d55659fb33058aa41fc5dc2 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_d62271531d55659fb33058aa41fc5dc2.addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+            var circle_marker_44d5fd9d9fdc4a14040d21fb2ff6b320 = L.circleMarker(
+                [43.5161018, -80.2369272],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_384322f9be1f603e8df9487e88d95879 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d31152dc19c50d7a38d4d3daf986659b = $(`<div id="html_d31152dc19c50d7a38d4d3daf986659b" style="width: 100.0%; height: 100.0%;">Farm Boy Guelph: 370 Stone Road West</div>`)[0];
+                popup_384322f9be1f603e8df9487e88d95879.setContent(html_d31152dc19c50d7a38d4d3daf986659b);
+            
+        
+
+        circle_marker_44d5fd9d9fdc4a14040d21fb2ff6b320.bindPopup(popup_384322f9be1f603e8df9487e88d95879)
+        ;
+
+        
+    
+    
+            circle_marker_44d5fd9d9fdc4a14040d21fb2ff6b320.bindTooltip(
+                `<div>
+                     Farm Boy Guelph: 370 Stone Road West
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_00bebeb2e12daa9cbc73444304ca0d0e = L.circleMarker(
+                [43.4209679, -80.4404296],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_05d466cc6b998c59f01bf0d7c36f2cfa = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_b3ae2d131907888dea5fea0d022249c2 = $(`<div id="html_b3ae2d131907888dea5fea0d022249c2" style="width: 100.0%; height: 100.0%;">Farm Boy Kitchener: 385 Fairway Road South</div>`)[0];
+                popup_05d466cc6b998c59f01bf0d7c36f2cfa.setContent(html_b3ae2d131907888dea5fea0d022249c2);
+            
+        
+
+        circle_marker_00bebeb2e12daa9cbc73444304ca0d0e.bindPopup(popup_05d466cc6b998c59f01bf0d7c36f2cfa)
+        ;
+
+        
+    
+    
+            circle_marker_00bebeb2e12daa9cbc73444304ca0d0e.bindTooltip(
+                `<div>
+                     Farm Boy Kitchener: 385 Fairway Road South
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_9355cb34835e905e039a7410e3738c05 = L.circleMarker(
+                [43.4855568, -80.5274827],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_6496502cb1eacc3bc2bbffc58a192455 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_f73bb8a04ed12a9e8639a4b46d914d62 = $(`<div id="html_f73bb8a04ed12a9e8639a4b46d914d62" style="width: 100.0%; height: 100.0%;">Farm Boy Waterloo: 417 King Street North</div>`)[0];
+                popup_6496502cb1eacc3bc2bbffc58a192455.setContent(html_f73bb8a04ed12a9e8639a4b46d914d62);
+            
+        
+
+        circle_marker_9355cb34835e905e039a7410e3738c05.bindPopup(popup_6496502cb1eacc3bc2bbffc58a192455)
+        ;
+
+        
+    
+    
+            circle_marker_9355cb34835e905e039a7410e3738c05.bindTooltip(
+                `<div>
+                     Farm Boy Waterloo: 417 King Street North
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_7a6f6b838b8b81a831b9392e882b9732 = L.circleMarker(
+                [43.3935986, -80.3206588],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_a11cfb5e0128b21528de7b84101bd7eb = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_4b455df86c4733a75f7b6e203ce08378 = $(`<div id="html_4b455df86c4733a75f7b6e203ce08378" style="width: 100.0%; height: 100.0%;">Farm Boy Cambridge: 350 Hespeler Road</div>`)[0];
+                popup_a11cfb5e0128b21528de7b84101bd7eb.setContent(html_4b455df86c4733a75f7b6e203ce08378);
+            
+        
+
+        circle_marker_7a6f6b838b8b81a831b9392e882b9732.bindPopup(popup_a11cfb5e0128b21528de7b84101bd7eb)
+        ;
+
+        
+    
+    
+            circle_marker_7a6f6b838b8b81a831b9392e882b9732.bindTooltip(
+                `<div>
+                     Farm Boy Cambridge: 350 Hespeler Road
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_94a5b7838d73508708210bdc2f797289 = L.circleMarker(
+                [42.9361714, -81.2243313],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_22743b1e0ca35b86fee92233cdd283c3 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_2c92a6e0547454f9a3e693e4a3fa1334 = $(`<div id="html_2c92a6e0547454f9a3e693e4a3fa1334" style="width: 100.0%; height: 100.0%;">Farm Boy Wellington (London): 1045 Wellington Road</div>`)[0];
+                popup_22743b1e0ca35b86fee92233cdd283c3.setContent(html_2c92a6e0547454f9a3e693e4a3fa1334);
+            
+        
+
+        circle_marker_94a5b7838d73508708210bdc2f797289.bindPopup(popup_22743b1e0ca35b86fee92233cdd283c3)
+        ;
+
+        
+    
+    
+            circle_marker_94a5b7838d73508708210bdc2f797289.bindTooltip(
+                `<div>
+                     Farm Boy Wellington (London): 1045 Wellington Road
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0f99e91238ecbbd0184c2caa13945627 = L.circleMarker(
+                [42.9375874, -81.2258503],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_a1fa00f9f4debc3593f925ef6c039993 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_669ca92b0c901c6389bbea8b9940f534 = $(`<div id="html_669ca92b0c901c6389bbea8b9940f534" style="width: 100.0%; height: 100.0%;">Farm Boy Masonville (London): 109 Fanshawe Park Road East</div>`)[0];
+                popup_a1fa00f9f4debc3593f925ef6c039993.setContent(html_669ca92b0c901c6389bbea8b9940f534);
+            
+        
+
+        circle_marker_0f99e91238ecbbd0184c2caa13945627.bindPopup(popup_a1fa00f9f4debc3593f925ef6c039993)
+        ;
+
+        
+    
+    
+            circle_marker_0f99e91238ecbbd0184c2caa13945627.bindTooltip(
+                `<div>
+                     Farm Boy Masonville (London): 109 Fanshawe Park Road East
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_7403ac67117c4ed2d3e10a6bac3b9380 = L.circleMarker(
+                [42.9894097, -81.2980569],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_531c997a740420035f1671933fc4a1cd = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_1807a2c1c7c8334b09ebbbe18cd172bb = $(`<div id="html_1807a2c1c7c8334b09ebbbe18cd172bb" style="width: 100.0%; height: 100.0%;">Farm Boy Beaverbrook (London): 1415 Beaverbrook Avenue</div>`)[0];
+                popup_531c997a740420035f1671933fc4a1cd.setContent(html_1807a2c1c7c8334b09ebbbe18cd172bb);
+            
+        
+
+        circle_marker_7403ac67117c4ed2d3e10a6bac3b9380.bindPopup(popup_531c997a740420035f1671933fc4a1cd)
+        ;
+
+        
+    
+    
+            circle_marker_7403ac67117c4ed2d3e10a6bac3b9380.bindTooltip(
+                `<div>
+                     Farm Boy Beaverbrook (London): 1415 Beaverbrook Avenue
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_42bc4dd6875a79f4501e4e6eedbf82f5 = L.circleMarker(
+                [43.1773159, -80.2782687],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_950188f7473627767748d25bd27df090 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_e01a977f96f7c2cd553ddcc501436390 = $(`<div id="html_e01a977f96f7c2cd553ddcc501436390" style="width: 100.0%; height: 100.0%;">Farm Boy Brantford: 240 King George Road</div>`)[0];
+                popup_950188f7473627767748d25bd27df090.setContent(html_e01a977f96f7c2cd553ddcc501436390);
+            
+        
+
+        circle_marker_42bc4dd6875a79f4501e4e6eedbf82f5.bindPopup(popup_950188f7473627767748d25bd27df090)
+        ;
+
+        
+    
+    
+            circle_marker_42bc4dd6875a79f4501e4e6eedbf82f5.bindTooltip(
+                `<div>
+                     Farm Boy Brantford: 240 King George Road
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d6f33cb3e333dacf1723080cab067b5e = L.circleMarker(
+                [43.156195, -79.2715741],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_fa803ec09d4e965109ce5ebda73cd734 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_a04591151d9104fd611fdf6e6d419542 = $(`<div id="html_a04591151d9104fd611fdf6e6d419542" style="width: 100.0%; height: 100.0%;">Farm Boy St. Catharines: 295 Fourth Avenue</div>`)[0];
+                popup_fa803ec09d4e965109ce5ebda73cd734.setContent(html_a04591151d9104fd611fdf6e6d419542);
+            
+        
+
+        circle_marker_d6f33cb3e333dacf1723080cab067b5e.bindPopup(popup_fa803ec09d4e965109ce5ebda73cd734)
+        ;
+
+        
+    
+    
+            circle_marker_d6f33cb3e333dacf1723080cab067b5e.bindTooltip(
+                `<div>
+                     Farm Boy St. Catharines: 295 Fourth Avenue
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_86c3c32e83513110c9c5906f195ba1ea = L.circleMarker(
+                [43.2331723, -79.9235966],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_3805ba045e3a521dd643eeb5309fef47 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_400babfae8d6fecd628fbc7f467e1c8b = $(`<div id="html_400babfae8d6fecd628fbc7f467e1c8b" style="width: 100.0%; height: 100.0%;">Farm Boy Hamilton: 801 Mohawk Road West</div>`)[0];
+                popup_3805ba045e3a521dd643eeb5309fef47.setContent(html_400babfae8d6fecd628fbc7f467e1c8b);
+            
+        
+
+        circle_marker_86c3c32e83513110c9c5906f195ba1ea.bindPopup(popup_3805ba045e3a521dd643eeb5309fef47)
+        ;
+
+        
+    
+    
+            circle_marker_86c3c32e83513110c9c5906f195ba1ea.bindTooltip(
+                `<div>
+                     Farm Boy Hamilton: 801 Mohawk Road West
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_71e380fccd5cee4c0ca6d5134025fdd6 = L.circleMarker(
+                [43.3518338, -79.7886164],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_1408b83764802387a379689b98108f3d = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_5efcc6aec35f70cbc3112e555f2e207a = $(`<div id="html_5efcc6aec35f70cbc3112e555f2e207a" style="width: 100.0%; height: 100.0%;">Farm Boy Burlington: 3061 Walkers Line</div>`)[0];
+                popup_1408b83764802387a379689b98108f3d.setContent(html_5efcc6aec35f70cbc3112e555f2e207a);
+            
+        
+
+        circle_marker_71e380fccd5cee4c0ca6d5134025fdd6.bindPopup(popup_1408b83764802387a379689b98108f3d)
+        ;
+
+        
+    
+    
+            circle_marker_71e380fccd5cee4c0ca6d5134025fdd6.bindTooltip(
+                `<div>
+                     Farm Boy Burlington: 3061 Walkers Line
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_c353278d8f01744e36a4f7ea184004c3 = L.circleMarker(
+                [43.3934668, -79.8247607],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_41dbf99ab3aae403882fbadd4df8e8b9 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_cf4f6dad8b42cec3e4480c86055ee94c = $(`<div id="html_cf4f6dad8b42cec3e4480c86055ee94c" style="width: 100.0%; height: 100.0%;">Farm Boy Burlington South: 3230 Fairview Street</div>`)[0];
+                popup_41dbf99ab3aae403882fbadd4df8e8b9.setContent(html_cf4f6dad8b42cec3e4480c86055ee94c);
+            
+        
+
+        circle_marker_c353278d8f01744e36a4f7ea184004c3.bindPopup(popup_41dbf99ab3aae403882fbadd4df8e8b9)
+        ;
+
+        
+    
+    
+            circle_marker_c353278d8f01744e36a4f7ea184004c3.bindTooltip(
+                `<div>
+                     Farm Boy Burlington South: 3230 Fairview Street
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b4195643a0370987d5fe2a374b5b25da = L.circleMarker(
+                [43.4925476, -79.6798627],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_9cf0e70737f7cffbc7066aa1a5162f74 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_1f994d174db1eb54f7c8d06bcaad36a7 = $(`<div id="html_1f994d174db1eb54f7c8d06bcaad36a7" style="width: 100.0%; height: 100.0%;">Farm Boy Oakville: 1907 Ironoak Way</div>`)[0];
+                popup_9cf0e70737f7cffbc7066aa1a5162f74.setContent(html_1f994d174db1eb54f7c8d06bcaad36a7);
+            
+        
+
+        circle_marker_b4195643a0370987d5fe2a374b5b25da.bindPopup(popup_9cf0e70737f7cffbc7066aa1a5162f74)
+        ;
+
+        
+    
+    
+            circle_marker_b4195643a0370987d5fe2a374b5b25da.bindTooltip(
+                `<div>
+                     Farm Boy Oakville: 1907 Ironoak Way
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_7edd80385ef330714326a92b11027417 = L.circleMarker(
+                [43.3958128, -79.7113725],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_87f326ea6dba7071f865490cedcdc0df = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_91f8658aba68ced1bca0ff260f984367 = $(`<div id="html_91f8658aba68ced1bca0ff260f984367" style="width: 100.0%; height: 100.0%;">Farm Boy Bronte (Oakville): 2441 Lakeshore Road West</div>`)[0];
+                popup_87f326ea6dba7071f865490cedcdc0df.setContent(html_91f8658aba68ced1bca0ff260f984367);
+            
+        
+
+        circle_marker_7edd80385ef330714326a92b11027417.bindPopup(popup_87f326ea6dba7071f865490cedcdc0df)
+        ;
+
+        
+    
+    
+            circle_marker_7edd80385ef330714326a92b11027417.bindTooltip(
+                `<div>
+                     Farm Boy Bronte (Oakville): 2441 Lakeshore Road West
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_cda9e0a7fb5268ce9fea14ef9d0ff59b = L.circleMarker(
+                [43.5469996, -79.590122],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_a0393a597041dd0e36293b5ad38ba0bf = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_95229d3296d1b6ad7bebc23fb835a7f2 = $(`<div id="html_95229d3296d1b6ad7bebc23fb835a7f2" style="width: 100.0%; height: 100.0%;">Farm Boy Port Credit (Mississauga): 175 Lakeshore Road West</div>`)[0];
+                popup_a0393a597041dd0e36293b5ad38ba0bf.setContent(html_95229d3296d1b6ad7bebc23fb835a7f2);
+            
+        
+
+        circle_marker_cda9e0a7fb5268ce9fea14ef9d0ff59b.bindPopup(popup_a0393a597041dd0e36293b5ad38ba0bf)
+        ;
+
+        
+    
+    
+            circle_marker_cda9e0a7fb5268ce9fea14ef9d0ff59b.bindTooltip(
+                `<div>
+                     Farm Boy Port Credit (Mississauga): 175 Lakeshore Road West
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_eb2a9997b1236545a66c05997e1533f9 = L.circleMarker(
+                [43.6603152, -79.3844864],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_c6f826229728a5b99897bad01ee74b89 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_1b980421fca22670762140cd385add20 = $(`<div id="html_1b980421fca22670762140cd385add20" style="width: 100.0%; height: 100.0%;">Farm Boy College & Bay: 777 Bay Street</div>`)[0];
+                popup_c6f826229728a5b99897bad01ee74b89.setContent(html_1b980421fca22670762140cd385add20);
+            
+        
+
+        circle_marker_eb2a9997b1236545a66c05997e1533f9.bindPopup(popup_c6f826229728a5b99897bad01ee74b89)
+        ;
+
+        
+    
+    
+            circle_marker_eb2a9997b1236545a66c05997e1533f9.bindTooltip(
+                `<div>
+                     Farm Boy College & Bay: 777 Bay Street
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_276f002349b69309f2678ab36a322308 = L.circleMarker(
+                [43.6410409, -79.4012546],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_41941c9201d209b32fcb894077921677 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_74a45ce8511053fb6698216085f094fa = $(`<div id="html_74a45ce8511053fb6698216085f094fa" style="width: 100.0%; height: 100.0%;">Farm Boy Front & Bathurst: 29 Bathurst Street</div>`)[0];
+                popup_41941c9201d209b32fcb894077921677.setContent(html_74a45ce8511053fb6698216085f094fa);
+            
+        
+
+        circle_marker_276f002349b69309f2678ab36a322308.bindPopup(popup_41941c9201d209b32fcb894077921677)
+        ;
+
+        
+    
+    
+            circle_marker_276f002349b69309f2678ab36a322308.bindTooltip(
+                `<div>
+                     Farm Boy Front & Bathurst: 29 Bathurst Street
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_7b545f3349c10a7ba46ce5381e3e5e5d = L.circleMarker(
+                [43.6394101, -79.3805122],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_26f16d2431bbc36cf335d61cb6b9e4a9 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_3a3ea4b458e245d4d84657f6f9dc4b1c = $(`<div id="html_3a3ea4b458e245d4d84657f6f9dc4b1c" style="width: 100.0%; height: 100.0%;">Farm Boy Harbourfront: 207 Queens Quay West</div>`)[0];
+                popup_26f16d2431bbc36cf335d61cb6b9e4a9.setContent(html_3a3ea4b458e245d4d84657f6f9dc4b1c);
+            
+        
+
+        circle_marker_7b545f3349c10a7ba46ce5381e3e5e5d.bindPopup(popup_26f16d2431bbc36cf335d61cb6b9e4a9)
+        ;
+
+        
+    
+    
+            circle_marker_7b545f3349c10a7ba46ce5381e3e5e5d.bindTooltip(
+                `<div>
+                     Farm Boy Harbourfront: 207 Queens Quay West
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_dbfac7ed69696fd0d44cd26c74e60abf = L.circleMarker(
+                [43.6437105, -79.3710502],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_8bf1b7a1fd5dcd33e69b73e333d47212 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_635fabfeda32b3e3e851efa2161beb17 = $(`<div id="html_635fabfeda32b3e3e851efa2161beb17" style="width: 100.0%; height: 100.0%;">Farm Boy Sugar Wharf: 100 Queens Quay East</div>`)[0];
+                popup_8bf1b7a1fd5dcd33e69b73e333d47212.setContent(html_635fabfeda32b3e3e851efa2161beb17);
+            
+        
+
+        circle_marker_dbfac7ed69696fd0d44cd26c74e60abf.bindPopup(popup_8bf1b7a1fd5dcd33e69b73e333d47212)
+        ;
+
+        
+    
+    
+            circle_marker_dbfac7ed69696fd0d44cd26c74e60abf.bindTooltip(
+                `<div>
+                     Farm Boy Sugar Wharf: 100 Queens Quay East
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_1a5470646c14a6e9f24d6dd63a61655c = L.circleMarker(
+                [43.6714265, -79.4235408],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_f2d793afedbcf7118334976a4ea155a9 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_92606118989b0cfea9b76d6c2cbff63c = $(`<div id="html_92606118989b0cfea9b76d6c2cbff63c" style="width: 100.0%; height: 100.0%;">Farm Boy Dupont: 744 Dupont Street</div>`)[0];
+                popup_f2d793afedbcf7118334976a4ea155a9.setContent(html_92606118989b0cfea9b76d6c2cbff63c);
+            
+        
+
+        circle_marker_1a5470646c14a6e9f24d6dd63a61655c.bindPopup(popup_f2d793afedbcf7118334976a4ea155a9)
+        ;
+
+        
+    
+    
+            circle_marker_1a5470646c14a6e9f24d6dd63a61655c.bindTooltip(
+                `<div>
+                     Farm Boy Dupont: 744 Dupont Street
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_9a77b2803c9841963b8a71186d9e80a5 = L.circleMarker(
+                [43.688501, -79.3907567],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_40bea722e516610ccbc79f33fb991e19 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_f7c1a2b78f2e198a11b301999e217176 = $(`<div id="html_f7c1a2b78f2e198a11b301999e217176" style="width: 100.0%; height: 100.0%;">Farm Boy St. Clair: 81 St. Clair Avenue East</div>`)[0];
+                popup_40bea722e516610ccbc79f33fb991e19.setContent(html_f7c1a2b78f2e198a11b301999e217176);
+            
+        
+
+        circle_marker_9a77b2803c9841963b8a71186d9e80a5.bindPopup(popup_40bea722e516610ccbc79f33fb991e19)
+        ;
+
+        
+    
+    
+            circle_marker_9a77b2803c9841963b8a71186d9e80a5.bindTooltip(
+                `<div>
+                     Farm Boy St. Clair: 81 St. Clair Avenue East
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f5f27b33ce2bd10fad110d4636989f81 = L.circleMarker(
+                [43.7042642, -79.3972232],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_aed2426dce8c436b84558122d166a299 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_cc838cbd8f18637137eec551237c649d = $(`<div id="html_cc838cbd8f18637137eec551237c649d" style="width: 100.0%; height: 100.0%;">Farm Boy Yonge & Soudan: 2149 Yonge Street</div>`)[0];
+                popup_aed2426dce8c436b84558122d166a299.setContent(html_cc838cbd8f18637137eec551237c649d);
+            
+        
+
+        circle_marker_f5f27b33ce2bd10fad110d4636989f81.bindPopup(popup_aed2426dce8c436b84558122d166a299)
+        ;
+
+        
+    
+    
+            circle_marker_f5f27b33ce2bd10fad110d4636989f81.bindTooltip(
+                `<div>
+                     Farm Boy Yonge & Soudan: 2149 Yonge Street
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_7b25202e19e26fe4eaf81c76a7cc4050 = L.circleMarker(
+                [43.7096892, -79.3595562],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_8bed4108dc4e2859038dfa80b359dd37 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_85d531861c371377c08906d64b065466 = $(`<div id="html_85d531861c371377c08906d64b065466" style="width: 100.0%; height: 100.0%;">Farm Boy Leaside: 147 Laird Drive</div>`)[0];
+                popup_8bed4108dc4e2859038dfa80b359dd37.setContent(html_85d531861c371377c08906d64b065466);
+            
+        
+
+        circle_marker_7b25202e19e26fe4eaf81c76a7cc4050.bindPopup(popup_8bed4108dc4e2859038dfa80b359dd37)
+        ;
+
+        
+    
+    
+            circle_marker_7b25202e19e26fe4eaf81c76a7cc4050.bindTooltip(
+                `<div>
+                     Farm Boy Leaside: 147 Laird Drive
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_2f2fae94a96df2121b839df9dda0a440 = L.circleMarker(
+                [43.6578398, -79.3303826],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_bf4df43ced9e33b9c90e7d1232691225 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_324f1a05b4d6e1a2a06618465b82093f = $(`<div id="html_324f1a05b4d6e1a2a06618465b82093f" style="width: 100.0%; height: 100.0%;">Farm Boy Leslieville: 1005 Lake Shore Boulevard East</div>`)[0];
+                popup_bf4df43ced9e33b9c90e7d1232691225.setContent(html_324f1a05b4d6e1a2a06618465b82093f);
+            
+        
+
+        circle_marker_2f2fae94a96df2121b839df9dda0a440.bindPopup(popup_bf4df43ced9e33b9c90e7d1232691225)
+        ;
+
+        
+    
+    
+            circle_marker_2f2fae94a96df2121b839df9dda0a440.bindTooltip(
+                `<div>
+                     Farm Boy Leslieville: 1005 Lake Shore Boulevard East
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_37a62a13910b721a2eff9bf579190df0 = L.circleMarker(
+                [43.6100852, -79.5475302],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_7bc5454ab0c135ba4081d23dc386687a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_72539c857eeef0848ec1d51c797f231b = $(`<div id="html_72539c857eeef0848ec1d51c797f231b" style="width: 100.0%; height: 100.0%;">Farm Boy Alderwood (Etobicoke): 841 Brown's Line</div>`)[0];
+                popup_7bc5454ab0c135ba4081d23dc386687a.setContent(html_72539c857eeef0848ec1d51c797f231b);
+            
+        
+
+        circle_marker_37a62a13910b721a2eff9bf579190df0.bindPopup(popup_7bc5454ab0c135ba4081d23dc386687a)
+        ;
+
+        
+    
+    
+            circle_marker_37a62a13910b721a2eff9bf579190df0.bindTooltip(
+                `<div>
+                     Farm Boy Alderwood (Etobicoke): 841 Brown's Line
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_84d1fb7b987d777645ef70451248a800 = L.circleMarker(
+                [43.6385451, -79.537566],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_1dd3cb047d8659d80147c987a7a72deb = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_22c7240dcbf7a4f366424ee588f8b0ef = $(`<div id="html_22c7240dcbf7a4f366424ee588f8b0ef" style="width: 100.0%; height: 100.0%;">Farm Boy Aukland (Etobicoke): 5245 Dundas Street West</div>`)[0];
+                popup_1dd3cb047d8659d80147c987a7a72deb.setContent(html_22c7240dcbf7a4f366424ee588f8b0ef);
+            
+        
+
+        circle_marker_84d1fb7b987d777645ef70451248a800.bindPopup(popup_1dd3cb047d8659d80147c987a7a72deb)
+        ;
+
+        
+    
+    
+            circle_marker_84d1fb7b987d777645ef70451248a800.bindTooltip(
+                `<div>
+                     Farm Boy Aukland (Etobicoke): 5245 Dundas Street West
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_fb3030d80d8f5fc710963b08937479ef = L.circleMarker(
+                [43.8466334, -79.3799697],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_62def1c0e580bbfc6196d4949b76691d = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d2654d00d1d9f1edf48c68ca31965c17 = $(`<div id="html_d2654d00d1d9f1edf48c68ca31965c17" style="width: 100.0%; height: 100.0%;">Farm Boy Shoppes of the Parkway (Richmond Hill): 65-95 East Beaver Creek</div>`)[0];
+                popup_62def1c0e580bbfc6196d4949b76691d.setContent(html_d2654d00d1d9f1edf48c68ca31965c17);
+            
+        
+
+        circle_marker_fb3030d80d8f5fc710963b08937479ef.bindPopup(popup_62def1c0e580bbfc6196d4949b76691d)
+        ;
+
+        
+    
+    
+            circle_marker_fb3030d80d8f5fc710963b08937479ef.bindTooltip(
+                `<div>
+                     Farm Boy Shoppes of the Parkway (Richmond Hill): 65-95 East Beaver Creek
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_22b9a22f8734665768ddbf45800bda8c = L.circleMarker(
+                [43.9267897, -79.4514569],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_7f2a4af758f957eefee01db3792fb3e9 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_f38dd04b3b9bda8900396278c1f05df6 = $(`<div id="html_f38dd04b3b9bda8900396278c1f05df6" style="width: 100.0%; height: 100.0%;">Farm Boy Yonge & Silver Maple (Richmond Hill): 12276 Yonge Street</div>`)[0];
+                popup_7f2a4af758f957eefee01db3792fb3e9.setContent(html_f38dd04b3b9bda8900396278c1f05df6);
+            
+        
+
+        circle_marker_22b9a22f8734665768ddbf45800bda8c.bindPopup(popup_7f2a4af758f957eefee01db3792fb3e9)
+        ;
+
+        
+    
+    
+            circle_marker_22b9a22f8734665768ddbf45800bda8c.bindTooltip(
+                `<div>
+                     Farm Boy Yonge & Silver Maple (Richmond Hill): 12276 Yonge Street
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_14781065d881b085eaf2acf642726d77 = L.circleMarker(
+                [44.0108058, -79.4165102],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_1be993082e2795cf1ec031b19b964037 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d93df18f7f1040b5fe53b22bd6fef3db = $(`<div id="html_d93df18f7f1040b5fe53b22bd6fef3db" style="width: 100.0%; height: 100.0%;">Farm Boy Aurora: 10 Goulding Avenue</div>`)[0];
+                popup_1be993082e2795cf1ec031b19b964037.setContent(html_d93df18f7f1040b5fe53b22bd6fef3db);
+            
+        
+
+        circle_marker_14781065d881b085eaf2acf642726d77.bindPopup(popup_1be993082e2795cf1ec031b19b964037)
+        ;
+
+        
+    
+    
+            circle_marker_14781065d881b085eaf2acf642726d77.bindTooltip(
+                `<div>
+                     Farm Boy Aurora: 10 Goulding Avenue
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_6c7c05852e6f62835afabdc32dbf76ce = L.circleMarker(
+                [44.0703676, -79.4840083],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_4f58e9d46d362871fd9ae922bed1be65 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_5e48a88e1ecd659be8f71a63a0ec8999 = $(`<div id="html_5e48a88e1ecd659be8f71a63a0ec8999" style="width: 100.0%; height: 100.0%;">Farm Boy Newmarket: 18075 Yonge Street</div>`)[0];
+                popup_4f58e9d46d362871fd9ae922bed1be65.setContent(html_5e48a88e1ecd659be8f71a63a0ec8999);
+            
+        
+
+        circle_marker_6c7c05852e6f62835afabdc32dbf76ce.bindPopup(popup_4f58e9d46d362871fd9ae922bed1be65)
+        ;
+
+        
+    
+    
+            circle_marker_6c7c05852e6f62835afabdc32dbf76ce.bindTooltip(
+                `<div>
+                     Farm Boy Newmarket: 18075 Yonge Street
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_9bf714a4c318cf12812ded3cc96f6f2a = L.circleMarker(
+                [44.33530435764122, -79.69064637640413],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_ea6255b021d9ec8ecdb52b05da56854b = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_fd0ad9804f756a9889213adcde38e59a = $(`<div id="html_fd0ad9804f756a9889213adcde38e59a" style="width: 100.0%; height: 100.0%;">Farm Boy Barrie: 436 Bryne Drive</div>`)[0];
+                popup_ea6255b021d9ec8ecdb52b05da56854b.setContent(html_fd0ad9804f756a9889213adcde38e59a);
+            
+        
+
+        circle_marker_9bf714a4c318cf12812ded3cc96f6f2a.bindPopup(popup_ea6255b021d9ec8ecdb52b05da56854b)
+        ;
+
+        
+    
+    
+            circle_marker_9bf714a4c318cf12812ded3cc96f6f2a.bindTooltip(
+                `<div>
+                     Farm Boy Barrie: 436 Bryne Drive
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_eeb14f7e145ea82f3a49d12c8d6b68de = L.circleMarker(
+                [43.8352767, -79.0887562],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_ddc8398d62adf808f667888785b5c912 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_0e6ebfc56f4807c9de065dfa5589c64b = $(`<div id="html_0e6ebfc56f4807c9de065dfa5589c64b" style="width: 100.0%; height: 100.0%;">Farm Boy Pickering: 1355 Kingston Road</div>`)[0];
+                popup_ddc8398d62adf808f667888785b5c912.setContent(html_0e6ebfc56f4807c9de065dfa5589c64b);
+            
+        
+
+        circle_marker_eeb14f7e145ea82f3a49d12c8d6b68de.bindPopup(popup_ddc8398d62adf808f667888785b5c912)
+        ;
+
+        
+    
+    
+            circle_marker_eeb14f7e145ea82f3a49d12c8d6b68de.bindTooltip(
+                `<div>
+                     Farm Boy Pickering: 1355 Kingston Road
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_c5ea7bf7fee0686b07ea66b7a4dca7d8 = L.circleMarker(
+                [43.9189828, -78.9415263],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_a882357161bc8bf1202e646f757bb91e = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_2cb98d62ecd2d1b1ed11b9e47c20a77c = $(`<div id="html_2cb98d62ecd2d1b1ed11b9e47c20a77c" style="width: 100.0%; height: 100.0%;">Farm Boy Whitby: 360 Taunton Road East</div>`)[0];
+                popup_a882357161bc8bf1202e646f757bb91e.setContent(html_2cb98d62ecd2d1b1ed11b9e47c20a77c);
+            
+        
+
+        circle_marker_c5ea7bf7fee0686b07ea66b7a4dca7d8.bindPopup(popup_a882357161bc8bf1202e646f757bb91e)
+        ;
+
+        
+    
+    
+            circle_marker_c5ea7bf7fee0686b07ea66b7a4dca7d8.bindTooltip(
+                `<div>
+                     Farm Boy Whitby: 360 Taunton Road East
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_cca427544167c0ff6776c2a98b790842 = L.circleMarker(
+                [43.9364041, -78.8553646],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_6cf59e7d5692b83c6bd0ee8a98b90c67 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_46eef91baaed3c1407346ad184f45a0b = $(`<div id="html_46eef91baaed3c1407346ad184f45a0b" style="width: 100.0%; height: 100.0%;">Farm Boy Oshawa: 1280 Clearbrook Drive</div>`)[0];
+                popup_6cf59e7d5692b83c6bd0ee8a98b90c67.setContent(html_46eef91baaed3c1407346ad184f45a0b);
+            
+        
+
+        circle_marker_cca427544167c0ff6776c2a98b790842.bindPopup(popup_6cf59e7d5692b83c6bd0ee8a98b90c67)
+        ;
+
+        
+    
+    
+            circle_marker_cca427544167c0ff6776c2a98b790842.bindTooltip(
+                `<div>
+                     Farm Boy Oshawa: 1280 Clearbrook Drive
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_44ba9dbab91fdb0849b4aa1fd77a1fb3 = L.circleMarker(
+                [44.257313, -76.5536571],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_239d0fa8e4e893a540274eeae45a5603 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_8a42258866e794356d7c99edc5948732 = $(`<div id="html_8a42258866e794356d7c99edc5948732" style="width: 100.0%; height: 100.0%;">Farm Boy Kingston: 940 Futures Gate</div>`)[0];
+                popup_239d0fa8e4e893a540274eeae45a5603.setContent(html_8a42258866e794356d7c99edc5948732);
+            
+        
+
+        circle_marker_44ba9dbab91fdb0849b4aa1fd77a1fb3.bindPopup(popup_239d0fa8e4e893a540274eeae45a5603)
+        ;
+
+        
+    
+    
+            circle_marker_44ba9dbab91fdb0849b4aa1fd77a1fb3.bindTooltip(
+                `<div>
+                     Farm Boy Kingston: 940 Futures Gate
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_31c6689dd34591408e133305d122e147 = L.circleMarker(
+                [45.0278916, -74.7328714],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_77052a3d52acceddfde921d6ed21a68c = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_bcd5ba3e00c10eeb8a163e0696cfa45a = $(`<div id="html_bcd5ba3e00c10eeb8a163e0696cfa45a" style="width: 100.0%; height: 100.0%;">Farm Boy Cornwall: 814 Sydney Street (The Original Store)</div>`)[0];
+                popup_77052a3d52acceddfde921d6ed21a68c.setContent(html_bcd5ba3e00c10eeb8a163e0696cfa45a);
+            
+        
+
+        circle_marker_31c6689dd34591408e133305d122e147.bindPopup(popup_77052a3d52acceddfde921d6ed21a68c)
+        ;
+
+        
+    
+    
+            circle_marker_31c6689dd34591408e133305d122e147.bindTooltip(
+                `<div>
+                     Farm Boy Cornwall: 814 Sydney Street (The Original Store)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ae010bc26b4142081aafe6ff719d5e40 = L.circleMarker(
+                [45.3457988, -75.6260126],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_83e9ab6ecdfd1d57d22482feadc7a885 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_1b99d39a073a9d175a7c46e014676229 = $(`<div id="html_1b99d39a073a9d175a7c46e014676229" style="width: 100.0%; height: 100.0%;">Farm Boy Bank Street (Blue Heron): 1500 Bank Street</div>`)[0];
+                popup_83e9ab6ecdfd1d57d22482feadc7a885.setContent(html_1b99d39a073a9d175a7c46e014676229);
+            
+        
+
+        circle_marker_ae010bc26b4142081aafe6ff719d5e40.bindPopup(popup_83e9ab6ecdfd1d57d22482feadc7a885)
+        ;
+
+        
+    
+    
+            circle_marker_ae010bc26b4142081aafe6ff719d5e40.bindTooltip(
+                `<div>
+                     Farm Boy Bank Street (Blue Heron): 1500 Bank Street
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_896ddcfec2cbf8dfb06bd3800ec42f37 = L.circleMarker(
+                [45.288643, -75.7240977],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_e0ff77fa81b2f8fc5eb1fbf393563c6e = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_b68badcd10d553aa18a861cb60e651b8 = $(`<div id="html_b68badcd10d553aa18a861cb60e651b8" style="width: 100.0%; height: 100.0%;">Farm Boy Barrhaven: 3033 Woodroffe Avenue</div>`)[0];
+                popup_e0ff77fa81b2f8fc5eb1fbf393563c6e.setContent(html_b68badcd10d553aa18a861cb60e651b8);
+            
+        
+
+        circle_marker_896ddcfec2cbf8dfb06bd3800ec42f37.bindPopup(popup_e0ff77fa81b2f8fc5eb1fbf393563c6e)
+        ;
+
+        
+    
+    
+            circle_marker_896ddcfec2cbf8dfb06bd3800ec42f37.bindTooltip(
+                `<div>
+                     Farm Boy Barrhaven: 3033 Woodroffe Avenue
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_267beb27c6d6c0d2ae2f26172965ab2e = L.circleMarker(
+                [45.3457988, -75.6260126],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_898f8016fe4c5c10d995741a5903cc0a = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_b3a18aabd7c2fd0196ee33b07f0d8dd6 = $(`<div id="html_b3a18aabd7c2fd0196ee33b07f0d8dd6" style="width: 100.0%; height: 100.0%;">Farm Boy Blossom Park: 2950 Bank Street</div>`)[0];
+                popup_898f8016fe4c5c10d995741a5903cc0a.setContent(html_b3a18aabd7c2fd0196ee33b07f0d8dd6);
+            
+        
+
+        circle_marker_267beb27c6d6c0d2ae2f26172965ab2e.bindPopup(popup_898f8016fe4c5c10d995741a5903cc0a)
+        ;
+
+        
+    
+    
+            circle_marker_267beb27c6d6c0d2ae2f26172965ab2e.bindTooltip(
+                `<div>
+                     Farm Boy Blossom Park: 2950 Bank Street
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_22d140f4e65a9c695a0d46d531e5ed2b = L.circleMarker(
+                [45.3629928, -75.7915505],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_3e3c06fbbaab9ae56ef88994a3a2e1cf = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_3058e704774856797f6031685492cd89 = $(`<div id="html_3058e704774856797f6031685492cd89" style="width: 100.0%; height: 100.0%;">Farm Boy Britannia: 1495 Richmond Road</div>`)[0];
+                popup_3e3c06fbbaab9ae56ef88994a3a2e1cf.setContent(html_3058e704774856797f6031685492cd89);
+            
+        
+
+        circle_marker_22d140f4e65a9c695a0d46d531e5ed2b.bindPopup(popup_3e3c06fbbaab9ae56ef88994a3a2e1cf)
+        ;
+
+        
+    
+    
+            circle_marker_22d140f4e65a9c695a0d46d531e5ed2b.bindTooltip(
+                `<div>
+                     Farm Boy Britannia: 1495 Richmond Road
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_1a22349ad04ee5820a8141f732a852b8 = L.circleMarker(
+                [45.2741712, -75.7470098],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_9feba0db8695d15678755141e6cb0c90 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_886a20cb1a75fba5888b207942c33b07 = $(`<div id="html_886a20cb1a75fba5888b207942c33b07" style="width: 100.0%; height: 100.0%;">Farm Boy Greenbank: 1581 Greenbank Road</div>`)[0];
+                popup_9feba0db8695d15678755141e6cb0c90.setContent(html_886a20cb1a75fba5888b207942c33b07);
+            
+        
+
+        circle_marker_1a22349ad04ee5820a8141f732a852b8.bindPopup(popup_9feba0db8695d15678755141e6cb0c90)
+        ;
+
+        
+    
+    
+            circle_marker_1a22349ad04ee5820a8141f732a852b8.bindTooltip(
+                `<div>
+                     Farm Boy Greenbank: 1581 Greenbank Road
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_c1adf3a81b09f61fbf3a2921d059d125 = L.circleMarker(
+                [45.3107805, -75.9216603],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_0b8815db7e6091681d3a14ba1edf31b0 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_d0393f0f09b81d085e4ed040da1344bc = $(`<div id="html_d0393f0f09b81d085e4ed040da1344bc" style="width: 100.0%; height: 100.0%;">Farm Boy Kanata: 700 Terry Fox Drive</div>`)[0];
+                popup_0b8815db7e6091681d3a14ba1edf31b0.setContent(html_d0393f0f09b81d085e4ed040da1344bc);
+            
+        
+
+        circle_marker_c1adf3a81b09f61fbf3a2921d059d125.bindPopup(popup_0b8815db7e6091681d3a14ba1edf31b0)
+        ;
+
+        
+    
+    
+            circle_marker_c1adf3a81b09f61fbf3a2921d059d125.bindTooltip(
+                `<div>
+                     Farm Boy Kanata: 700 Terry Fox Drive
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_7531c766e98fc4f5ab50f213c0f8c41b = L.circleMarker(
+                [45.4430895, -75.6447295],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_63f9ce4835f90554f46c6367ed872dd7 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_b2a937f0eeb91880a6b95292d6d75572 = $(`<div id="html_b2a937f0eeb91880a6b95292d6d75572" style="width: 100.0%; height: 100.0%;">Farm Boy Montreal Road (Hillside): 585 Montreal Road</div>`)[0];
+                popup_63f9ce4835f90554f46c6367ed872dd7.setContent(html_b2a937f0eeb91880a6b95292d6d75572);
+            
+        
+
+        circle_marker_7531c766e98fc4f5ab50f213c0f8c41b.bindPopup(popup_63f9ce4835f90554f46c6367ed872dd7)
+        ;
+
+        
+    
+    
+            circle_marker_7531c766e98fc4f5ab50f213c0f8c41b.bindTooltip(
+                `<div>
+                     Farm Boy Montreal Road (Hillside): 585 Montreal Road
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e1ab0457109c21e69140563e6aeda494 = L.circleMarker(
+                [45.4777309, -75.5132795],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_b345661d1e4b714a335d42eaeb1122ae = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_5bf755d5c0e2965db2d9e5ce5e9562b0 = $(`<div id="html_5bf755d5c0e2965db2d9e5ce5e9562b0" style="width: 100.0%; height: 100.0%;">Farm Boy Orleans: 3035 St. Joseph Boulevard</div>`)[0];
+                popup_b345661d1e4b714a335d42eaeb1122ae.setContent(html_5bf755d5c0e2965db2d9e5ce5e9562b0);
+            
+        
+
+        circle_marker_e1ab0457109c21e69140563e6aeda494.bindPopup(popup_b345661d1e4b714a335d42eaeb1122ae)
+        ;
+
+        
+    
+    
+            circle_marker_e1ab0457109c21e69140563e6aeda494.bindTooltip(
+                `<div>
+                     Farm Boy Orleans: 3035 St. Joseph Boulevard
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_33d7f41bd378164dc1a9dff499012f5f = L.circleMarker(
+                [45.418746, -75.6933872],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_efea77e9bff2f91ab80e72f2e3a5d07c = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_5550e609dacb77b424e590a4327875d3 = $(`<div id="html_5550e609dacb77b424e590a4327875d3" style="width: 100.0%; height: 100.0%;">Farm Boy Rideau: 193 Metcalfe Street</div>`)[0];
+                popup_efea77e9bff2f91ab80e72f2e3a5d07c.setContent(html_5550e609dacb77b424e590a4327875d3);
+            
+        
+
+        circle_marker_33d7f41bd378164dc1a9dff499012f5f.bindPopup(popup_efea77e9bff2f91ab80e72f2e3a5d07c)
+        ;
+
+        
+    
+    
+            circle_marker_33d7f41bd378164dc1a9dff499012f5f.bindTooltip(
+                `<div>
+                     Farm Boy Rideau: 193 Metcalfe Street
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_26568aa73ce2e85dedb74675e9c840f4 = L.circleMarker(
+                [45.3107805, -75.9216603],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_06b1527413b46bb2528bd59e08a0876e = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_ba90cffcd292deeec03c4d3235791530 = $(`<div id="html_ba90cffcd292deeec03c4d3235791530" style="width: 100.0%; height: 100.0%;">Farm Boy Signature Centre (Kanata): 499 Terry Fox Drive</div>`)[0];
+                popup_06b1527413b46bb2528bd59e08a0876e.setContent(html_ba90cffcd292deeec03c4d3235791530);
+            
+        
+
+        circle_marker_26568aa73ce2e85dedb74675e9c840f4.bindPopup(popup_06b1527413b46bb2528bd59e08a0876e)
+        ;
+
+        
+    
+    
+            circle_marker_26568aa73ce2e85dedb74675e9c840f4.bindTooltip(
+                `<div>
+                     Farm Boy Signature Centre (Kanata): 499 Terry Fox Drive
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_77dfd4774831e848a0555cd2e9194b29 = L.circleMarker(
+                [45.2662373, -75.9414901],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_9ec608a8d217037915420655e0317034 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_921ca93215e6b12ce5a0bb3a0c795dac = $(`<div id="html_921ca93215e6b12ce5a0bb3a0c795dac" style="width: 100.0%; height: 100.0%;">Farm Boy Stittsville: 6315 Hazeldean Road</div>`)[0];
+                popup_9ec608a8d217037915420655e0317034.setContent(html_921ca93215e6b12ce5a0bb3a0c795dac);
+            
+        
+
+        circle_marker_77dfd4774831e848a0555cd2e9194b29.bindPopup(popup_9ec608a8d217037915420655e0317034)
+        ;
+
+        
+    
+    
+            circle_marker_77dfd4774831e848a0555cd2e9194b29.bindTooltip(
+                `<div>
+                     Farm Boy Stittsville: 6315 Hazeldean Road
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_92a327b4305eb75d9c80dfcf12612649 = L.circleMarker(
+                [45.4582935, -75.4878897],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_7be186a28bd5a05bb8b543ccbd9158ef = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_fccf95e8deea13261218e15f16e7f831 = $(`<div id="html_fccf95e8deea13261218e15f16e7f831" style="width: 100.0%; height: 100.0%;">Farm Boy Tenth Line (Orleans): 2030 Tenth Line Road</div>`)[0];
+                popup_7be186a28bd5a05bb8b543ccbd9158ef.setContent(html_fccf95e8deea13261218e15f16e7f831);
+            
+        
+
+        circle_marker_92a327b4305eb75d9c80dfcf12612649.bindPopup(popup_7be186a28bd5a05bb8b543ccbd9158ef)
+        ;
+
+        
+    
+    
+            circle_marker_92a327b4305eb75d9c80dfcf12612649.bindTooltip(
+                `<div>
+                     Farm Boy Tenth Line (Orleans): 2030 Tenth Line Road
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b8d6f95f27ba3127a5273d9587bd9f7b = L.circleMarker(
+                [45.4181185, -75.6469296],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_609cc772f4c439c15c171adb1bb38d47 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_9fddd1f6772c43f5a6ea32e0d33eb400 = $(`<div id="html_9fddd1f6772c43f5a6ea32e0d33eb400" style="width: 100.0%; height: 100.0%;">Farm Boy Train Yards: 830 Belfast Road</div>`)[0];
+                popup_609cc772f4c439c15c171adb1bb38d47.setContent(html_9fddd1f6772c43f5a6ea32e0d33eb400);
+            
+        
+
+        circle_marker_b8d6f95f27ba3127a5273d9587bd9f7b.bindPopup(popup_609cc772f4c439c15c171adb1bb38d47)
+        ;
+
+        
+    
+    
+            circle_marker_b8d6f95f27ba3127a5273d9587bd9f7b.bindTooltip(
+                `<div>
+                     Farm Boy Train Yards: 830 Belfast Road
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_7376ed1b8b4e2173a56e10767d0e537c = L.circleMarker(
+                [45.3896623, -75.6137995],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_889fa99b36551254ffedb18409bc06c5 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_bc04312b93e2db5855c8044c95946700 = $(`<div id="html_bc04312b93e2db5855c8044c95946700" style="width: 100.0%; height: 100.0%;">Farm Boy Walkley: 1980 Walkley Road</div>`)[0];
+                popup_889fa99b36551254ffedb18409bc06c5.setContent(html_bc04312b93e2db5855c8044c95946700);
+            
+        
+
+        circle_marker_7376ed1b8b4e2173a56e10767d0e537c.bindPopup(popup_889fa99b36551254ffedb18409bc06c5)
+        ;
+
+        
+    
+    
+            circle_marker_7376ed1b8b4e2173a56e10767d0e537c.bindTooltip(
+                `<div>
+                     Farm Boy Walkley: 1980 Walkley Road
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_2c7ff3c67ac1c118f5cf7c51fdc87de4 = L.circleMarker(
+                [45.3962011, -75.7499293],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_82ee8d1d2815d8ae8c55dd21ebe03095 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_39aeab121c2941ac6e63aceac24a1f6d = $(`<div id="html_39aeab121c2941ac6e63aceac24a1f6d" style="width: 100.0%; height: 100.0%;">Farm Boy Westboro: 317 McRae Avenue</div>`)[0];
+                popup_82ee8d1d2815d8ae8c55dd21ebe03095.setContent(html_39aeab121c2941ac6e63aceac24a1f6d);
+            
+        
+
+        circle_marker_2c7ff3c67ac1c118f5cf7c51fdc87de4.bindPopup(popup_82ee8d1d2815d8ae8c55dd21ebe03095)
+        ;
+
+        
+    
+    
+            circle_marker_2c7ff3c67ac1c118f5cf7c51fdc87de4.bindTooltip(
+                `<div>
+                     Farm Boy Westboro: 317 McRae Avenue
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_08fabe58d38d3fd96537d075ff263be4 = L.circleMarker(
+                [45.3464283, -75.73225],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_361fb2678d6d1ca83dd1d4c68d651ad3);
+        
+    
+        var popup_d466523433e41df4e359255fdbd2b734 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_a6279d4c88cdf33225564db434609584 = $(`<div id="html_a6279d4c88cdf33225564db434609584" style="width: 100.0%; height: 100.0%;">Farm Boy Merivale: 1642 Merivale Road</div>`)[0];
+                popup_d466523433e41df4e359255fdbd2b734.setContent(html_a6279d4c88cdf33225564db434609584);
+            
+        
+
+        circle_marker_08fabe58d38d3fd96537d075ff263be4.bindPopup(popup_d466523433e41df4e359255fdbd2b734)
+        ;
+
+        
+    
+    
+            circle_marker_08fabe58d38d3fd96537d075ff263be4.bindTooltip(
+                `<div>
+                     Farm Boy Merivale: 1642 Merivale Road
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+</script>
+</html>
