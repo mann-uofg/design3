@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_82ac18a8971b5a617096d86a51a6a131 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+    <div style="position:fixed;bottom:30px;left:30px;z-index:9999;
+                background:white;padding:14px;border:2px solid #aaa;
+                border-radius:8px;font-size:13px;line-height:1.9;min-width:210px;">
+        <b>🗓 Route Legend</b><br>
+        <span style="color:#e74c3c">━━</span> Monday<br><span style="color:#3498db">━━</span> Tuesday<br><span style="color:#2ecc71">━━</span> Wednesday<br><span style="color:#f39c12">━━</span> Thursday<br>
+        <hr style="margin:6px 0;">
+        <b>🌿 BSF Facility Fill</b><br>
+        <div style="background:#eee;border-radius:4px;height:14px;width:170px;">
+          <div style="background:#f1c40f;width:68%;height:14px;
+                      border-radius:4px;"></div>
+        </div>
+        <small>67.6% of 50,000 kg</small>
+    </div>
+    
+            <div class="folium-map" id="map_82ac18a8971b5a617096d86a51a6a131" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_82ac18a8971b5a617096d86a51a6a131 = L.map(
+                "map_82ac18a8971b5a617096d86a51a6a131",
+                {
+                    center: [43.46, -80.39],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 11,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_44bab0f77dfb2ccb3c89623be78f6ec4 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_44bab0f77dfb2ccb3c89623be78f6ec4.addTo(map_82ac18a8971b5a617096d86a51a6a131);
+        
+    
+            var marker_cdebda96de14d692a817b0fb4e30f8d9 = L.marker(
+                [43.49, -80.42],
+                {
+}
+            ).addTo(map_82ac18a8971b5a617096d86a51a6a131);
+        
+    
+            var icon_3e13e3977bf3a775f2bf04f79079456e = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "black",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_55894d5ba5d999f0bf6a65e334b49c2f = L.popup({
+  "maxWidth": 290,
+});
+
+        
+            
+                var html_f98b987c142cf8d0e1834b29ccb510ce = $(`<div id="html_f98b987c142cf8d0e1834b29ccb510ce" style="width: 100.0%; height: 100.0%;"><b>BSF Processing Facility — Woolwich Township (Breslau area)</b><br>Woolwich Township, ON  (rural / agricultural zone)<br><br>Weekly capacity : 50,000 kg<br>Fill after week : 33,819 kg (67.6%)</div>`)[0];
+                popup_55894d5ba5d999f0bf6a65e334b49c2f.setContent(html_f98b987c142cf8d0e1834b29ccb510ce);
+            
+        
+
+        marker_cdebda96de14d692a817b0fb4e30f8d9.bindPopup(popup_55894d5ba5d999f0bf6a65e334b49c2f)
+        ;
+
+        
+    
+    
+            marker_cdebda96de14d692a817b0fb4e30f8d9.bindTooltip(
+                `<div>
+                     BSF Facility — Woolwich Township
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_cdebda96de14d692a817b0fb4e30f8d9.setIcon(icon_3e13e3977bf3a775f2bf04f79079456e);
+            
+    
+            var circle_marker_077f7eaa705395f2433ae41ff8736931 = L.circleMarker(
+                [43.4855568, -80.5274827],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 84.62916666666666, "stroke": true, "weight": 3}
+            ).addTo(map_82ac18a8971b5a617096d86a51a6a131);
+        
+    
+        var popup_27c474078ef6b99d70c038cb723d45ad = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_4aa1d215044ad2693b5ec92c31108e8d = $(`<div id="html_4aa1d215044ad2693b5ec92c31108e8d" style="width: 100.0%; height: 100.0%;"><b>Waterloo</b><br>417 King Street North, Waterloo<br>Size: 26,725 sqft<br>Weekly waste: 10,155.5 kg<br>Truck loads/visit: 4<br>Collection day: Monday</div>`)[0];
+                popup_27c474078ef6b99d70c038cb723d45ad.setContent(html_4aa1d215044ad2693b5ec92c31108e8d);
+            
+        
+
+        circle_marker_077f7eaa705395f2433ae41ff8736931.bindPopup(popup_27c474078ef6b99d70c038cb723d45ad)
+        ;
+
+        
+    
+    
+            circle_marker_077f7eaa705395f2433ae41ff8736931.bindTooltip(
+                `<div>
+                     Waterloo — 10,155.5 kg/wk
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_aeef5144d3ad43f8b4889648788e0d37 = L.circleMarker(
+                [43.5161018, -80.2369272],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 75.82833333333333, "stroke": true, "weight": 3}
+            ).addTo(map_82ac18a8971b5a617096d86a51a6a131);
+        
+    
+        var popup_32b52156e7e09fae13ee19c41f7e7e97 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_23e5dca054ac6671a6813dc54bb77ac3 = $(`<div id="html_23e5dca054ac6671a6813dc54bb77ac3" style="width: 100.0%; height: 100.0%;"><b>Guelph</b><br>370 Stone Road West, Guelph<br>Size: 25,276 sqft<br>Weekly waste: 9,099.4 kg<br>Truck loads/visit: 4<br>Collection day: Tuesday</div>`)[0];
+                popup_32b52156e7e09fae13ee19c41f7e7e97.setContent(html_23e5dca054ac6671a6813dc54bb77ac3);
+            
+        
+
+        circle_marker_aeef5144d3ad43f8b4889648788e0d37.bindPopup(popup_32b52156e7e09fae13ee19c41f7e7e97)
+        ;
+
+        
+    
+    
+            circle_marker_aeef5144d3ad43f8b4889648788e0d37.bindTooltip(
+                `<div>
+                     Guelph — 9,099.4 kg/wk
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_26cc4c37504bd38db5b0d26933d7c71b = L.circleMarker(
+                [43.3935986, -80.3206588],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 62.7, "stroke": true, "weight": 3}
+            ).addTo(map_82ac18a8971b5a617096d86a51a6a131);
+        
+    
+        var popup_eb5f7ab7258d76b0970dc889e580628d = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_5118e673de145983d5d853387653ddf6 = $(`<div id="html_5118e673de145983d5d853387653ddf6" style="width: 100.0%; height: 100.0%;"><b>Cambridge</b><br>350 Hespeler Road, Cambridge<br>Size: 22,800 sqft<br>Weekly waste: 7,524.0 kg<br>Truck loads/visit: 3<br>Collection day: Wednesday</div>`)[0];
+                popup_eb5f7ab7258d76b0970dc889e580628d.setContent(html_5118e673de145983d5d853387653ddf6);
+            
+        
+
+        circle_marker_26cc4c37504bd38db5b0d26933d7c71b.bindPopup(popup_eb5f7ab7258d76b0970dc889e580628d)
+        ;
+
+        
+    
+    
+            circle_marker_26cc4c37504bd38db5b0d26933d7c71b.bindTooltip(
+                `<div>
+                     Cambridge — 7,524.0 kg/wk
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_5f250db96ac377f296e392dec4806a8b = L.circleMarker(
+                [43.4209679, -80.4404296],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 58.666666666666664, "stroke": true, "weight": 3}
+            ).addTo(map_82ac18a8971b5a617096d86a51a6a131);
+        
+    
+        var popup_1b0af2df67f91db64fd3b060c1e009fd = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_55224a88521f4f4a3c2f42e53f71f03e = $(`<div id="html_55224a88521f4f4a3c2f42e53f71f03e" style="width: 100.0%; height: 100.0%;"><b>Kitchener</b><br>385 Fairway Road South, Kitchener<br>Size: 22,000 sqft<br>Weekly waste: 7,040.0 kg<br>Truck loads/visit: 3<br>Collection day: Thursday</div>`)[0];
+                popup_1b0af2df67f91db64fd3b060c1e009fd.setContent(html_55224a88521f4f4a3c2f42e53f71f03e);
+            
+        
+
+        circle_marker_5f250db96ac377f296e392dec4806a8b.bindPopup(popup_1b0af2df67f91db64fd3b060c1e009fd)
+        ;
+
+        
+    
+    
+            circle_marker_5f250db96ac377f296e392dec4806a8b.bindTooltip(
+                `<div>
+                     Kitchener — 7,040.0 kg/wk
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_ad74dbbd2bd9530568b6a5d0793b1e4a = L.polyline(
+                [[43.49, -80.42], [43.4855568, -80.5274827], [43.49, -80.42]],
+                {"bubblingMouseEvents": true, "color": "#e74c3c", "dashArray": "8 4", "dashOffset": null, "fill": false, "fillColor": "#e74c3c", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 1.0, "stroke": true, "weight": 5.0}
+            ).addTo(map_82ac18a8971b5a617096d86a51a6a131);
+        
+    
+            poly_line_ad74dbbd2bd9530568b6a5d0793b1e4a.bindTooltip(
+                `<div>
+                     Monday: Waterloo  (4 loads, 93.8 km)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_c7bb0fbcfd2eead304501d7c95916565 = L.polyline(
+                [[43.49, -80.42], [43.5161018, -80.2369272], [43.49, -80.42]],
+                {"bubblingMouseEvents": true, "color": "#3498db", "dashArray": "8 4", "dashOffset": null, "fill": false, "fillColor": "#3498db", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 1.0, "stroke": true, "weight": 5.0}
+            ).addTo(map_82ac18a8971b5a617096d86a51a6a131);
+        
+    
+            poly_line_c7bb0fbcfd2eead304501d7c95916565.bindTooltip(
+                `<div>
+                     Tuesday: Guelph  (4 loads, 162.5 km)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_c5a25ba089f8fbce59da7173d82751a1 = L.polyline(
+                [[43.49, -80.42], [43.3935986, -80.3206588], [43.49, -80.42]],
+                {"bubblingMouseEvents": true, "color": "#2ecc71", "dashArray": "8 4", "dashOffset": null, "fill": false, "fillColor": "#2ecc71", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 1.0, "stroke": true, "weight": 4.5}
+            ).addTo(map_82ac18a8971b5a617096d86a51a6a131);
+        
+    
+            poly_line_c5a25ba089f8fbce59da7173d82751a1.bindTooltip(
+                `<div>
+                     Wednesday: Cambridge  (3 loads, 108.4 km)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_7f3d177b5457af813c307b10e5f71016 = L.polyline(
+                [[43.49, -80.42], [43.4209679, -80.4404296], [43.49, -80.42]],
+                {"bubblingMouseEvents": true, "color": "#f39c12", "dashArray": "8 4", "dashOffset": null, "fill": false, "fillColor": "#f39c12", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 1.0, "stroke": true, "weight": 4.5}
+            ).addTo(map_82ac18a8971b5a617096d86a51a6a131);
+        
+    
+            poly_line_7f3d177b5457af813c307b10e5f71016.bindTooltip(
+                `<div>
+                     Thursday: Kitchener  (3 loads, 63.6 km)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+</script>
+</html>

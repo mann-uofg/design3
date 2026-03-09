@@ -1,0 +1,79 @@
+========================================================================
+  FARM BOY × BSF WASTE COLLECTION SYSTEM
+========================================================================
+
+  BSF FACILITY STATUS
+  --------------------------------------------------------------------
+  Name     : BSF Processing Facility — Woolwich Township (Breslau area)
+  Address  : Woolwich Township, ON  (rural / agricultural zone)
+  Capacity :     50,000 kg / week
+  Fill (start of week) :          0 kg  (0.0%)  [NORMAL]
+  Fill (after collect) :   33,818.9 kg  (67.6%)  [WARNING]
+  Status   : 🟡 WARNING (67.6%) — facility past half capacity.
+
+
+  STORE WASTE PROFILES  (1 visit / store / week)
+  --------------------------------------------------------------------
+  Store           sqft     kg/wk  Loads  kg/load  Collected  Deferred  Day         Status
+  ------------------------------------------------------------------------------------------
+  Waterloo      26,725  10,155.5      4  2,538.9   10,155.5       0.0  Monday      
+  Guelph        25,276   9,099.4      4  2,274.8    9,099.4       0.0  Tuesday     
+  Cambridge     22,800   7,524.0      3  2,508.0    7,524.0       0.0  Wednesday   
+  Kitchener     22,000   7,040.0      3  2,346.7    7,040.0       0.0  Thursday    
+
+  Truck capacity  : 3,000 kg / load  ← change TRUCK_CAPACITY_KG to resize truck
+  Truck speed     : 60 km/h  |  Load/unload: 25 min/stop  |  Road factor: 1.35×
+  Workday cap     : 480 min (8 hrs)
+
+
+========================================================================
+  WEEKLY COLLECTION SCHEDULE  (1 visit/store/week — split loads to BSF facility)
+========================================================================
+
+  MONDAY
+  ────────────────────────────────────────────────────────────────
+  Store      : Waterloo
+  Route      : Facility → Waterloo → Facility  ×4 load(s)
+  One-way    : 11.7 km  |  Round-trip/load: 23.4 km
+  Waste      : 10,155.5 kg total  (4 × 2,538.9 kg / load)
+
+  Day total  : 93.8 km  |  194 min (3.2 hrs)
+
+  TUESDAY
+  ────────────────────────────────────────────────────────────────
+  Store      : Guelph
+  Route      : Facility → Guelph → Facility  ×4 load(s)
+  One-way    : 20.3 km  |  Round-trip/load: 40.6 km
+  Waste      : 9,099.4 kg total  (4 × 2,274.8 kg / load)
+
+  Day total  : 162.5 km  |  262 min (4.4 hrs)
+
+  WEDNESDAY
+  ────────────────────────────────────────────────────────────────
+  Store      : Cambridge
+  Route      : Facility → Cambridge → Facility  ×3 load(s)
+  One-way    : 18.1 km  |  Round-trip/load: 36.1 km
+  Waste      : 7,524.0 kg total  (3 × 2,508.0 kg / load)
+
+  Day total  : 108.4 km  |  183 min (3.1 hrs)
+
+  THURSDAY
+  ────────────────────────────────────────────────────────────────
+  Store      : Kitchener
+  Route      : Facility → Kitchener → Facility  ×3 load(s)
+  One-way    : 10.6 km  |  Round-trip/load: 21.2 km
+  Waste      : 7,040.0 kg total  (3 × 2,346.7 kg / load)
+
+  Day total  : 63.6 km  |  139 min (2.3 hrs)
+
+  FRIDAY
+  ────────────────────────────────────────────────────────────────
+  [Buffer / BSF facility processing day — no collections]
+
+========================================================================
+  WEEKLY TOTALS
+  Total route distance   : 428.4 km
+  Total operational time : 13.0 hrs
+  Total waste collected  : 33,819 kg
+  Facility fill (end)    : 33,819 / 50,000 kg  (67.6%)
+========================================================================
