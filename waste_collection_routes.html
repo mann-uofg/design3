@@ -17,7 +17,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_82ac18a8971b5a617096d86a51a6a131 {
+                #map_161787f59af581ce86ac91ccfa79435c {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -56,26 +56,27 @@
     
     <div style="position:fixed;bottom:30px;left:30px;z-index:9999;
                 background:white;padding:14px;border:2px solid #aaa;
-                border-radius:8px;font-size:13px;line-height:1.9;min-width:210px;">
-        <b>🗓 Route Legend</b><br>
-        <span style="color:#e74c3c">━━</span> Monday<br><span style="color:#3498db">━━</span> Tuesday<br><span style="color:#2ecc71">━━</span> Wednesday<br><span style="color:#f39c12">━━</span> Thursday<br>
+                border-radius:8px;font-size:13px;line-height:2;min-width:230px;">
+        <b>🗓 Trip Legend</b><br>
+        <span style="color:#e74c3c">━━</span> Trip 1 — Monday<br><span style="color:#3498db">━━</span> Trip 2 — Thursday<br>
         <hr style="margin:6px 0;">
-        <b>🌿 BSF Facility Fill</b><br>
-        <div style="background:#eee;border-radius:4px;height:14px;width:170px;">
-          <div style="background:#f1c40f;width:68%;height:14px;
+        <b>🌿 Larvae Bin Usage</b><br>
+        <small>40 / 45 bins  (89%)</small><br>
+        <div style="background:#eee;border-radius:4px;height:14px;width:180px;">
+          <div style="background:#f39c12;width:89%;height:14px;
                       border-radius:4px;"></div>
         </div>
-        <small>67.6% of 50,000 kg</small>
+        <small>Total facility bins: 50  |  In larval cycle: 5</small>
     </div>
     
-            <div class="folium-map" id="map_82ac18a8971b5a617096d86a51a6a131" ></div>
+            <div class="folium-map" id="map_161787f59af581ce86ac91ccfa79435c" ></div>
         
 </body>
 <script>
     
     
-            var map_82ac18a8971b5a617096d86a51a6a131 = L.map(
-                "map_82ac18a8971b5a617096d86a51a6a131",
+            var map_161787f59af581ce86ac91ccfa79435c = L.map(
+                "map_161787f59af581ce86ac91ccfa79435c",
                 {
                     center: [43.46, -80.39],
                     crs: L.CRS.EPSG3857,
@@ -92,7 +93,7 @@
 
         
     
-            var tile_layer_44bab0f77dfb2ccb3c89623be78f6ec4 = L.tileLayer(
+            var tile_layer_01dff5b9195a900951978357f7d2efc0 = L.tileLayer(
                 "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {
   "minZoom": 0,
@@ -109,17 +110,17 @@
             );
         
     
-            tile_layer_44bab0f77dfb2ccb3c89623be78f6ec4.addTo(map_82ac18a8971b5a617096d86a51a6a131);
+            tile_layer_01dff5b9195a900951978357f7d2efc0.addTo(map_161787f59af581ce86ac91ccfa79435c);
         
     
-            var marker_cdebda96de14d692a817b0fb4e30f8d9 = L.marker(
+            var marker_865a1373f7c6eddb2b3656d0c0566bd8 = L.marker(
                 [43.49, -80.42],
                 {
 }
-            ).addTo(map_82ac18a8971b5a617096d86a51a6a131);
+            ).addTo(map_161787f59af581ce86ac91ccfa79435c);
         
     
-            var icon_3e13e3977bf3a775f2bf04f79079456e = L.AwesomeMarkers.icon(
+            var icon_083baffc7845022c4a7d736a8e195b36 = L.AwesomeMarkers.icon(
                 {
   "markerColor": "black",
   "iconColor": "white",
@@ -130,24 +131,24 @@
             );
         
     
-        var popup_55894d5ba5d999f0bf6a65e334b49c2f = L.popup({
-  "maxWidth": 290,
+        var popup_713fbdd45b1fcb49e5ca8906f5477bed = L.popup({
+  "maxWidth": 310,
 });
 
         
             
-                var html_f98b987c142cf8d0e1834b29ccb510ce = $(`<div id="html_f98b987c142cf8d0e1834b29ccb510ce" style="width: 100.0%; height: 100.0%;"><b>BSF Processing Facility — Woolwich Township (Breslau area)</b><br>Woolwich Township, ON  (rural / agricultural zone)<br><br>Weekly capacity : 50,000 kg<br>Fill after week : 33,819 kg (67.6%)</div>`)[0];
-                popup_55894d5ba5d999f0bf6a65e334b49c2f.setContent(html_f98b987c142cf8d0e1834b29ccb510ce);
+                var html_f6d1b33a9f14567fddae418f81f216e9 = $(`<div id="html_f6d1b33a9f14567fddae418f81f216e9" style="width: 100.0%; height: 100.0%;"><b>BSF Processing Facility — Woolwich Township (Breslau area)</b><br>Woolwich Township, ON  (rural / agricultural zone)<br><br><b>Bin Inventory</b><br>Total bins: 50  |  Weight/bin: 100 kg<br>Total capacity: 5,000 kg<br>Bins in use (prior cycle): 5<br>Available this week: 45  (4,500 kg)<br>Filled this week: 40<br>Status: 🟠 CAUTION (88.9%) — 5 bins left.</div>`)[0];
+                popup_713fbdd45b1fcb49e5ca8906f5477bed.setContent(html_f6d1b33a9f14567fddae418f81f216e9);
             
         
 
-        marker_cdebda96de14d692a817b0fb4e30f8d9.bindPopup(popup_55894d5ba5d999f0bf6a65e334b49c2f)
+        marker_865a1373f7c6eddb2b3656d0c0566bd8.bindPopup(popup_713fbdd45b1fcb49e5ca8906f5477bed)
         ;
 
         
     
     
-            marker_cdebda96de14d692a817b0fb4e30f8d9.bindTooltip(
+            marker_865a1373f7c6eddb2b3656d0c0566bd8.bindTooltip(
                 `<div>
                      BSF Facility — Woolwich Township
                  </div>`,
@@ -157,35 +158,35 @@
             );
         
     
-                marker_cdebda96de14d692a817b0fb4e30f8d9.setIcon(icon_3e13e3977bf3a775f2bf04f79079456e);
+                marker_865a1373f7c6eddb2b3656d0c0566bd8.setIcon(icon_083baffc7845022c4a7d736a8e195b36);
             
     
-            var circle_marker_077f7eaa705395f2433ae41ff8736931 = L.circleMarker(
+            var circle_marker_0478764863d9f9f9525fe5270ab678ed = L.circleMarker(
                 [43.4855568, -80.5274827],
-                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 84.62916666666666, "stroke": true, "weight": 3}
-            ).addTo(map_82ac18a8971b5a617096d86a51a6a131);
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 17.621666666666666, "stroke": true, "weight": 3}
+            ).addTo(map_161787f59af581ce86ac91ccfa79435c);
         
     
-        var popup_27c474078ef6b99d70c038cb723d45ad = L.popup({
-  "maxWidth": 250,
+        var popup_89fa1ecfe36da9580c03d85920e14b24 = L.popup({
+  "maxWidth": 270,
 });
 
         
             
-                var html_4aa1d215044ad2693b5ec92c31108e8d = $(`<div id="html_4aa1d215044ad2693b5ec92c31108e8d" style="width: 100.0%; height: 100.0%;"><b>Waterloo</b><br>417 King Street North, Waterloo<br>Size: 26,725 sqft<br>Weekly waste: 10,155.5 kg<br>Truck loads/visit: 4<br>Collection day: Monday</div>`)[0];
-                popup_27c474078ef6b99d70c038cb723d45ad.setContent(html_4aa1d215044ad2693b5ec92c31108e8d);
+                var html_64f02b6423716a943fbcf275f49ed488 = $(`<div id="html_64f02b6423716a943fbcf275f49ed488" style="width: 100.0%; height: 100.0%;"><b>Waterloo</b><br>417 King Street North, Waterloo, ON<br>Size: 26,725 sqft<br>Weekly waste: 1,057.3 kg<br>(proportional to Guelph 1,000 kg/week reference)<br>Loads/visit: 1<br>Bins allocated: 11<br>Collection: Trip 1 — Monday</div>`)[0];
+                popup_89fa1ecfe36da9580c03d85920e14b24.setContent(html_64f02b6423716a943fbcf275f49ed488);
             
         
 
-        circle_marker_077f7eaa705395f2433ae41ff8736931.bindPopup(popup_27c474078ef6b99d70c038cb723d45ad)
+        circle_marker_0478764863d9f9f9525fe5270ab678ed.bindPopup(popup_89fa1ecfe36da9580c03d85920e14b24)
         ;
 
         
     
     
-            circle_marker_077f7eaa705395f2433ae41ff8736931.bindTooltip(
+            circle_marker_0478764863d9f9f9525fe5270ab678ed.bindTooltip(
                 `<div>
-                     Waterloo — 10,155.5 kg/wk
+                     Waterloo — 1,057.3 kg/wk
                  </div>`,
                 {
   "sticky": true,
@@ -193,32 +194,32 @@
             );
         
     
-            var circle_marker_aeef5144d3ad43f8b4889648788e0d37 = L.circleMarker(
+            var circle_marker_474f04aa8da07bb03c2c50e021bffd81 = L.circleMarker(
                 [43.5161018, -80.2369272],
-                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 75.82833333333333, "stroke": true, "weight": 3}
-            ).addTo(map_82ac18a8971b5a617096d86a51a6a131);
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 16.666666666666668, "stroke": true, "weight": 3}
+            ).addTo(map_161787f59af581ce86ac91ccfa79435c);
         
     
-        var popup_32b52156e7e09fae13ee19c41f7e7e97 = L.popup({
-  "maxWidth": 250,
+        var popup_62069d164bc31a2c09967ec1d96d24a7 = L.popup({
+  "maxWidth": 270,
 });
 
         
             
-                var html_23e5dca054ac6671a6813dc54bb77ac3 = $(`<div id="html_23e5dca054ac6671a6813dc54bb77ac3" style="width: 100.0%; height: 100.0%;"><b>Guelph</b><br>370 Stone Road West, Guelph<br>Size: 25,276 sqft<br>Weekly waste: 9,099.4 kg<br>Truck loads/visit: 4<br>Collection day: Tuesday</div>`)[0];
-                popup_32b52156e7e09fae13ee19c41f7e7e97.setContent(html_23e5dca054ac6671a6813dc54bb77ac3);
+                var html_d7ee60489e6c14e35dc3e24c78e4e365 = $(`<div id="html_d7ee60489e6c14e35dc3e24c78e4e365" style="width: 100.0%; height: 100.0%;"><b>Guelph</b><br>370 Stone Road West, Guelph, ON<br>Size: 25,276 sqft<br>Weekly waste: 1,000.0 kg<br>(proportional to Guelph 1,000 kg/week reference)<br>Loads/visit: 1<br>Bins allocated: 10<br>Collection: Trip 2 — Thursday</div>`)[0];
+                popup_62069d164bc31a2c09967ec1d96d24a7.setContent(html_d7ee60489e6c14e35dc3e24c78e4e365);
             
         
 
-        circle_marker_aeef5144d3ad43f8b4889648788e0d37.bindPopup(popup_32b52156e7e09fae13ee19c41f7e7e97)
+        circle_marker_474f04aa8da07bb03c2c50e021bffd81.bindPopup(popup_62069d164bc31a2c09967ec1d96d24a7)
         ;
 
         
     
     
-            circle_marker_aeef5144d3ad43f8b4889648788e0d37.bindTooltip(
+            circle_marker_474f04aa8da07bb03c2c50e021bffd81.bindTooltip(
                 `<div>
-                     Guelph — 9,099.4 kg/wk
+                     Guelph — 1,000.0 kg/wk
                  </div>`,
                 {
   "sticky": true,
@@ -226,32 +227,32 @@
             );
         
     
-            var circle_marker_26cc4c37504bd38db5b0d26933d7c71b = L.circleMarker(
+            var circle_marker_30f0ddf8e940f9f6687b92d25eaa61d8 = L.circleMarker(
                 [43.3935986, -80.3206588],
-                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 62.7, "stroke": true, "weight": 3}
-            ).addTo(map_82ac18a8971b5a617096d86a51a6a131);
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 15.033333333333333, "stroke": true, "weight": 3}
+            ).addTo(map_161787f59af581ce86ac91ccfa79435c);
         
     
-        var popup_eb5f7ab7258d76b0970dc889e580628d = L.popup({
-  "maxWidth": 250,
+        var popup_235085cb028b59708e75f4ad9c0a632f = L.popup({
+  "maxWidth": 270,
 });
 
         
             
-                var html_5118e673de145983d5d853387653ddf6 = $(`<div id="html_5118e673de145983d5d853387653ddf6" style="width: 100.0%; height: 100.0%;"><b>Cambridge</b><br>350 Hespeler Road, Cambridge<br>Size: 22,800 sqft<br>Weekly waste: 7,524.0 kg<br>Truck loads/visit: 3<br>Collection day: Wednesday</div>`)[0];
-                popup_eb5f7ab7258d76b0970dc889e580628d.setContent(html_5118e673de145983d5d853387653ddf6);
+                var html_85cb41f4081f3bf8d73a2c37a726a2b8 = $(`<div id="html_85cb41f4081f3bf8d73a2c37a726a2b8" style="width: 100.0%; height: 100.0%;"><b>Cambridge</b><br>350 Hespeler Road, Cambridge, ON<br>Size: 22,800 sqft<br>Weekly waste: 902.0 kg<br>(proportional to Guelph 1,000 kg/week reference)<br>Loads/visit: 1<br>Bins allocated: 10<br>Collection: Trip 2 — Thursday</div>`)[0];
+                popup_235085cb028b59708e75f4ad9c0a632f.setContent(html_85cb41f4081f3bf8d73a2c37a726a2b8);
             
         
 
-        circle_marker_26cc4c37504bd38db5b0d26933d7c71b.bindPopup(popup_eb5f7ab7258d76b0970dc889e580628d)
+        circle_marker_30f0ddf8e940f9f6687b92d25eaa61d8.bindPopup(popup_235085cb028b59708e75f4ad9c0a632f)
         ;
 
         
     
     
-            circle_marker_26cc4c37504bd38db5b0d26933d7c71b.bindTooltip(
+            circle_marker_30f0ddf8e940f9f6687b92d25eaa61d8.bindTooltip(
                 `<div>
-                     Cambridge — 7,524.0 kg/wk
+                     Cambridge — 902.0 kg/wk
                  </div>`,
                 {
   "sticky": true,
@@ -259,32 +260,32 @@
             );
         
     
-            var circle_marker_5f250db96ac377f296e392dec4806a8b = L.circleMarker(
+            var circle_marker_3e2fc2cf26aa6e5c4bd0f591b321e9d1 = L.circleMarker(
                 [43.4209679, -80.4404296],
-                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 58.666666666666664, "stroke": true, "weight": 3}
-            ).addTo(map_82ac18a8971b5a617096d86a51a6a131);
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.75, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 14.506666666666666, "stroke": true, "weight": 3}
+            ).addTo(map_161787f59af581ce86ac91ccfa79435c);
         
     
-        var popup_1b0af2df67f91db64fd3b060c1e009fd = L.popup({
-  "maxWidth": 250,
+        var popup_0eb067a4f2c77d24af8475c37e12a595 = L.popup({
+  "maxWidth": 270,
 });
 
         
             
-                var html_55224a88521f4f4a3c2f42e53f71f03e = $(`<div id="html_55224a88521f4f4a3c2f42e53f71f03e" style="width: 100.0%; height: 100.0%;"><b>Kitchener</b><br>385 Fairway Road South, Kitchener<br>Size: 22,000 sqft<br>Weekly waste: 7,040.0 kg<br>Truck loads/visit: 3<br>Collection day: Thursday</div>`)[0];
-                popup_1b0af2df67f91db64fd3b060c1e009fd.setContent(html_55224a88521f4f4a3c2f42e53f71f03e);
+                var html_7320523d96b446d2244041104ae9ed14 = $(`<div id="html_7320523d96b446d2244041104ae9ed14" style="width: 100.0%; height: 100.0%;"><b>Kitchener</b><br>385 Fairway Road South, Kitchener, ON<br>Size: 22,000 sqft<br>Weekly waste: 870.4 kg<br>(proportional to Guelph 1,000 kg/week reference)<br>Loads/visit: 1<br>Bins allocated: 9<br>Collection: Trip 1 — Monday</div>`)[0];
+                popup_0eb067a4f2c77d24af8475c37e12a595.setContent(html_7320523d96b446d2244041104ae9ed14);
             
         
 
-        circle_marker_5f250db96ac377f296e392dec4806a8b.bindPopup(popup_1b0af2df67f91db64fd3b060c1e009fd)
+        circle_marker_3e2fc2cf26aa6e5c4bd0f591b321e9d1.bindPopup(popup_0eb067a4f2c77d24af8475c37e12a595)
         ;
 
         
     
     
-            circle_marker_5f250db96ac377f296e392dec4806a8b.bindTooltip(
+            circle_marker_3e2fc2cf26aa6e5c4bd0f591b321e9d1.bindTooltip(
                 `<div>
-                     Kitchener — 7,040.0 kg/wk
+                     Kitchener — 870.4 kg/wk
                  </div>`,
                 {
   "sticky": true,
@@ -292,15 +293,15 @@
             );
         
     
-            var poly_line_ad74dbbd2bd9530568b6a5d0793b1e4a = L.polyline(
-                [[43.49, -80.42], [43.4855568, -80.5274827], [43.49, -80.42]],
-                {"bubblingMouseEvents": true, "color": "#e74c3c", "dashArray": "8 4", "dashOffset": null, "fill": false, "fillColor": "#e74c3c", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 1.0, "stroke": true, "weight": 5.0}
-            ).addTo(map_82ac18a8971b5a617096d86a51a6a131);
+            var poly_line_8826f5e7b4be6d02947c95cfd2650e72 = L.polyline(
+                [[43.49, -80.42], [43.4855568, -80.5274827], [43.4209679, -80.4404296], [43.49, -80.42]],
+                {"bubblingMouseEvents": true, "color": "#e74c3c", "dashArray": "6 4", "dashOffset": null, "fill": false, "fillColor": "#e74c3c", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_161787f59af581ce86ac91ccfa79435c);
         
     
-            poly_line_ad74dbbd2bd9530568b6a5d0793b1e4a.bindTooltip(
+            poly_line_8826f5e7b4be6d02947c95cfd2650e72.bindTooltip(
                 `<div>
-                     Monday: Waterloo  (4 loads, 93.8 km)
+                     Trip 1 — Monday: Facility → Waterloo → Kitchener → Facility  |  54 km  |  119 min  |  64.3% truck util  |  20 bins
                  </div>`,
                 {
   "sticky": true,
@@ -308,47 +309,15 @@
             );
         
     
-            var poly_line_c7bb0fbcfd2eead304501d7c95916565 = L.polyline(
-                [[43.49, -80.42], [43.5161018, -80.2369272], [43.49, -80.42]],
-                {"bubblingMouseEvents": true, "color": "#3498db", "dashArray": "8 4", "dashOffset": null, "fill": false, "fillColor": "#3498db", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 1.0, "stroke": true, "weight": 5.0}
-            ).addTo(map_82ac18a8971b5a617096d86a51a6a131);
+            var poly_line_f8937ca7cdf7044798f5273ac5def2a0 = L.polyline(
+                [[43.49, -80.42], [43.5161018, -80.2369272], [43.3935986, -80.3206588], [43.49, -80.42]],
+                {"bubblingMouseEvents": true, "color": "#3498db", "dashArray": "6 4", "dashOffset": null, "fill": false, "fillColor": "#3498db", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_161787f59af581ce86ac91ccfa79435c);
         
     
-            poly_line_c7bb0fbcfd2eead304501d7c95916565.bindTooltip(
+            poly_line_f8937ca7cdf7044798f5273ac5def2a0.bindTooltip(
                 `<div>
-                     Tuesday: Guelph  (4 loads, 162.5 km)
-                 </div>`,
-                {
-  "sticky": true,
-}
-            );
-        
-    
-            var poly_line_c5a25ba089f8fbce59da7173d82751a1 = L.polyline(
-                [[43.49, -80.42], [43.3935986, -80.3206588], [43.49, -80.42]],
-                {"bubblingMouseEvents": true, "color": "#2ecc71", "dashArray": "8 4", "dashOffset": null, "fill": false, "fillColor": "#2ecc71", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 1.0, "stroke": true, "weight": 4.5}
-            ).addTo(map_82ac18a8971b5a617096d86a51a6a131);
-        
-    
-            poly_line_c5a25ba089f8fbce59da7173d82751a1.bindTooltip(
-                `<div>
-                     Wednesday: Cambridge  (3 loads, 108.4 km)
-                 </div>`,
-                {
-  "sticky": true,
-}
-            );
-        
-    
-            var poly_line_7f3d177b5457af813c307b10e5f71016 = L.polyline(
-                [[43.49, -80.42], [43.4209679, -80.4404296], [43.49, -80.42]],
-                {"bubblingMouseEvents": true, "color": "#f39c12", "dashArray": "8 4", "dashOffset": null, "fill": false, "fillColor": "#f39c12", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.85, "smoothFactor": 1.0, "stroke": true, "weight": 4.5}
-            ).addTo(map_82ac18a8971b5a617096d86a51a6a131);
-        
-    
-            poly_line_7f3d177b5457af813c307b10e5f71016.bindTooltip(
-                `<div>
-                     Thursday: Kitchener  (3 loads, 63.6 km)
+                     Trip 2 — Thursday: Facility → Guelph → Cambridge → Facility  |  62 km  |  128 min  |  63.4% truck util  |  20 bins
                  </div>`,
                 {
   "sticky": true,

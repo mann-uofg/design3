@@ -1,38 +1,41 @@
 """
-waste_collection_routing.py  (BSF facility + single weekly visit + capacity monitoring)
+waste_collection_routing.py
 
 Dynamic Waste Collection Routing — Farm Boy Regional Cluster
 Stores   : Guelph | Kitchener | Waterloo | Cambridge
-Facility : Black Soldier Fly processing plant — Woolwich Township farmland (Breslau area)
+Facility : Black Soldier Fly processing plant — Woolwich Township farmland
 
-Algorithm : Exact TSP (brute-force ≤8 nodes) + Single-Visit VRP + Facility Capacity Monitor
-Output    : Console report + Interactive Folium map
+Schedule : 2 trips/week (Monday + Thursday), 2 stores per trip
+Distances: Real road distances (Rome2Rio, DistanceCalculator.net, Wanderlog)
 
-CHANGES FROM v2:
-  § 1 : Added FACILITY_CAPACITY_KG, FACILITY_CURRENT_FILL_KG,
-        VISITS_PER_STORE_PER_WEEK (fixed = 1), WORKING_HOURS_MIN.
-        TRUCK_CAPACITY_KG remains fully configurable — change it to
-        reflect any truck size; all downstream calculations update automatically.
-  § 2 : FACILITY relocated from Guelph Waste Innovation District to
-        Woolwich Township farmland (BSF-appropriate rural/agricultural zone,
-        centred between all four stores to minimise total route distance).
-        Store sizes kept from v2 (owner-verified).
-  § 4 : Waste profile now enforces single visit per store per week.
-        loads_per_visit = ceil(weekly_kg / TRUCK_CAPACITY_KG).
-        Changing TRUCK_CAPACITY_KG directly changes loads_per_visit.
-  § 6 : New facility_status() — returns fill band (NORMAL / WARNING /
-        CAUTION / CRITICAL / FULL) + alert message at each threshold.
-  § 7 : Scheduler fully rebuilt with three capacity gates:
-          Gate 1  FACILITY_FULL       — store deferred entirely.
-          Gate 2  PARTIAL_COLLECTION  — collect only what facility can absorb.
-          Gate 3  OVERTIME_RISK       — day exceeds WORKING_HOURS_MIN cap.
-  § 8 : Daily route builder handles N-load split trips on a single visit day.
-  §10 : Report prints facility status banner + all flagged alerts.
-  §11 : Map updated — BSF facility marker (leaf icon), capacity bar in legend.
+COMPLETE CHANGES FROM v3:
+  §1  TRUCK_SPEED_KPH = 55 (semi-truck); LOADING_TIME_MIN = 30.
+      Larvae bin variables added: TOTAL_BINS, WEIGHT_PER_BIN_KG,
+      BINS_IN_USE, AVAILABLE_BINS, TOTAL_BIN_CAPACITY_KG,
+      AVAILABLE_BIN_CAPACITY_KG, BINS_WARN/CAUTION/CRITICAL.
+  §2  Haversine × factor REMOVED. ROAD_DIST_KM matrix of real
+      driving distances replaces it (source cited per entry).
+  §4  All waste rates (kg/sqft) REMOVED. Model now:
+        weekly_kg = (store_sqft / guelph_sqft) × 1,000
+      Guelph 1,000 kg/week confirmed by store manager.
+  §5  bin_status() added — tracks bins used vs available.
+      facility_status() retained for kg-level fill monitoring.
+  §6  Pairing optimizer: evaluates all 3 unique pairings of 4 stores
+      into 2 pairs of 2; selects minimum combined road distance.
+      Winner: (Waterloo+Kitchener) & (Guelph+Cambridge) = 116 km/week.
+  §7  Scheduler: step = ceil(5/2) = 3 → Mon(0) + Thu(3) (3-day gap).
+      Three capacity gates now bin-aware:
+        Gate 1  NO_BINS_AVAILABLE  — trip deferred entirely.
+        Gate 2  PARTIAL_BIN_LIMIT  — partial collection, kg proportioned
+                                     by store size fraction.
+        Gate 3  OVERTIME_RISK      — flagged if trip > WORKING_HOURS_MIN.
+  §9  Report shows bin inventory table, per-trip bin allocation,
+      bin-level alerts, and weekly bin utilisation.
+  §10 Map: BSF leaf marker, route polylines, capacity bar legend.
 """
 
-import itertools
-from math import radians, sin, cos, sqrt, atan2, ceil
+from itertools import combinations
+from math import ceil
 from collections import defaultdict
 import folium
 
@@ -41,26 +44,34 @@ import folium
 # ============================================================
 
 # ── Truck ────────────────────────────────────────────────────
-TRUCK_CAPACITY_KG          = 3_000   # kg per single truck load ← change truck size here
-TRUCK_SPEED_KPH            = 60      # avg road speed (urban slow-down included)
-LOADING_TIME_MIN           = 25      # min to load/unload at each store stop
-ROAD_FACTOR                = 1.35    # straight-line → actual road distance multiplier
+TRUCK_CAPACITY_KG   = 3_000   # kg per load  ← change to resize truck
+TRUCK_SPEED_KPH     = 55      # semi-truck average (urban + rural mix)
+LOADING_TIME_MIN    = 30      # semi-truck load/unload time per stop
+TRIPS_PER_WEEK      = 2       # fixed: 2 collection runs per week
+DAYS_PER_WEEK       = 5       # Mon–Fri
+WORKING_HOURS_MIN   = 480     # 8-hr daily cap
 
-# ── Schedule ────────────────────────────────────────────────
-DAYS_PER_WEEK              = 5       # Mon–Fri
-VISITS_PER_STORE_PER_WEEK  = 1       # fixed: each store visited exactly once/week
-WORKING_HOURS_MIN          = 480     # 8-hour workday cap (minutes)
+# ── BSF Larvae Bins ──────────────────────────────────────────
+# Physical containers used at the BSF facility to house larvae
+# while they consume organic waste (~12-day processing cycle).
+TOTAL_BINS          = 50      # total bins installed at facility
+WEIGHT_PER_BIN_KG   = 100     # max organic waste per bin (kg)
+                               # 200 L commercial BSFL container (~100 kg fill)
+BINS_IN_USE         = 5       # bins currently occupied by active larval cycle
+                               # ← update weekly; larvae mature in ~12 days
+# ── Derived bin variables (auto-computed — do not edit) ──────
+AVAILABLE_BINS            = TOTAL_BINS    - BINS_IN_USE
+TOTAL_BIN_CAPACITY_KG     = TOTAL_BINS    * WEIGHT_PER_BIN_KG   # 5,000 kg
+AVAILABLE_BIN_CAPACITY_KG = AVAILABLE_BINS * WEIGHT_PER_BIN_KG  # 4,500 kg
 
-# ── BSF Facility capacity ───────────────────────────────────
-FACILITY_CAPACITY_KG      = 50_000   # total weekly intake limit of the BSF plant
-FACILITY_CURRENT_FILL_KG  = 0        # pre-existing fill at week start (0 = empty)
-                                      # ← set e.g. 25_000 to simulate half-full
+# Bin fill alert thresholds (fraction of AVAILABLE_BINS used this week)
+BINS_WARN     = 0.50   # >= 50%  → WARNING
+BINS_CAUTION  = 0.75   # >= 75%  → CAUTION
+BINS_CRITICAL = 0.90   # >= 90%  → CRITICAL  (100% → FULL)
 
-# Fill alert thresholds (fraction of FACILITY_CAPACITY_KG)
-FILL_WARN     = 0.50   # >= 50% → WARNING
-FILL_CAUTION  = 0.75   # >= 75% → CAUTION
-FILL_CRITICAL = 0.90   # >= 90% → CRITICAL
-                        # >= 100% → FULL (hard stop — no further intake)
+# ── Waste reference  ← store-manager confirmed ──────────────
+REFERENCE_STORE     = "Guelph"
+REFERENCE_WEEKLY_KG = 1_000   # kg/week confirmed by Guelph store manager
 
 DAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 
@@ -69,595 +80,586 @@ DAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 # ============================================================
 
 # BSF Facility — Woolwich Township farmland, Breslau area, ON
-# Rationale:
-#   • Rural / agricultural zone — required zoning for BSF insect rearing.
-#   • Geographic centroid of the four-store cluster → minimises total
-#     round-trip distance for all collection runs.
-#   • Road-accessible via Fountain St N / Regional Rd 17 / Hwy 7.
-#   • ~12 km from Waterloo, ~11 km from Kitchener,
-#     ~20 km from Guelph, ~18 km from Cambridge.
+# Agricultural/rural zone: required for BSF insect-rearing operations.
+# Geographic centroid of the store cluster → minimises total route km.
+# Accessible via Fountain St N / Regional Rd 17 / Hwy 7.
+# ~20 min from all four store city centres.
+# (Source: Region of Waterloo International Airport, Breslau N0B 1M0)
 FACILITY = {
     "name"   : "BSF Processing Facility — Woolwich Township (Breslau area)",
-    "coords" : [43.490, -80.420],   # farmland NW of Breslau, Woolwich Township
+    "coords" : [43.490, -80.420],
     "address": "Woolwich Township, ON  (rural / agricultural zone)",
 }
 
-# Store sizes owner-verified (March 2026).
-# Waste rates: NRCAN 2021 + Retail Council of Canada (0.25–0.40 kg/sqft/week).
-# Stores with full deli / butcher / bakery skew toward the high end.
+# Store sizes owner-verified (March 2026)
 STORES = {
     "Waterloo": {
         "coords" : [43.4855568, -80.5274827],
-        "address": "417 King Street North, Waterloo",
-        "size_sqft"                       : 26_725,   # VERIFIED
-        "waste_rate_kg_per_sqft_per_week" : 0.38,
+        "address": "417 King Street North, Waterloo, ON",
+        "size_sqft": 26_725,
         "color"  : "blue",
-        "notes"  : "Largest in cluster (26,725 sqft). Full-service flagship — deli/butcher/bakery.",
+        "notes"  : "Largest in cluster (verified 26,725 sqft). Full-service flagship.",
     },
     "Guelph": {
         "coords" : [43.5161018, -80.2369272],
-        "address": "370 Stone Road West, Guelph",
-        "size_sqft"                       : 25_276,   # VERIFIED
-        "waste_rate_kg_per_sqft_per_week" : 0.36,
+        "address": "370 Stone Road West, Guelph, ON",
+        "size_sqft": 25_276,
         "color"  : "purple",
-        "notes"  : "2nd largest (25,276 sqft). High throughput, university corridor.",
+        "notes"  : "2nd largest (verified 25,276 sqft). Waste CONFIRMED 1,000 kg/week by store manager.",
     },
     "Cambridge": {
         "coords" : [43.3935986, -80.3206588],
-        "address": "350 Hespeler Road, Cambridge",
-        "size_sqft"                       : 22_800,   # VERIFIED
-        "waste_rate_kg_per_sqft_per_week" : 0.33,
+        "address": "350 Hespeler Road, Cambridge, ON",
+        "size_sqft": 22_800,
         "color"  : "orange",
-        "notes"  : "3rd largest (22,800 sqft). Hespeler Road suburban.",
+        "notes"  : "3rd largest (verified 22,800 sqft).",
     },
     "Kitchener": {
         "coords" : [43.4209679, -80.4404296],
-        "address": "385 Fairway Road South, Kitchener",
-        "size_sqft"                       : 22_000,   # VERIFIED
-        "waste_rate_kg_per_sqft_per_week" : 0.32,
+        "address": "385 Fairway Road South, Kitchener, ON",
+        "size_sqft": 22_000,
         "color"  : "green",
-        "notes"  : "Smallest in cluster (22,000 sqft). Fairway Road suburban.",
+        "notes"  : "Smallest in cluster (verified 22,000 sqft).",
     },
 }
 
 # ============================================================
-# SECTION 3: DISTANCE & TRAVEL UTILITIES  (unchanged)
+# SECTION 3: REAL ROAD DISTANCE MATRIX
 # ============================================================
+#
+# All values are actual driving distances (km) between specific
+# store addresses and the BSF facility. Sources cited inline.
+#
+#  F = Facility (Woolwich Township, Breslau area [43.490, -80.420])
+#  F↔G  Rome2Rio: Breslau–Guelph 18 km; facility ~2 km N → 20 km
+#  F↔C  Rome2Rio: Breslau–Cambridge 16 km; offset → 18 km
+#  F↔W  Road via Hwy 7 corridor; Breslau–Waterloo ~18 km
+#  F↔K  Rural Routes "Breslau 19 km NW of Kitchener";
+#        Fairway Rd S is S Kitchener → 22 km
+#  W↔K  DistanceCalculator.net city-centre 6 km;
+#        King St N (N Waterloo) ↔ Fairway Rd S (S Kitchener) diagonal → 14 km
+#  W↔G  Rome2Rio confirmed 27 km
+#  W↔C  Via Hwy 401 corridor; offset from K↔C → 30 km
+#  K↔G  Rome2Rio confirmed 28 km
+#  K↔C  Wanderlog confirmed 21 km (13.1 mi)
+#  G↔C  Rome2Rio confirmed 24 km
 
-def haversine_km(c1, c2):
-    """Great-circle straight-line distance in km."""
-    R = 6_371.0
-    lat1, lon1 = map(radians, c1)
-    lat2, lon2 = map(radians, c2)
-    dlat, dlon = lat2 - lat1, lon2 - lon1
-    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
-    return R * 2 * atan2(sqrt(a), sqrt(1 - a))
+ROAD_DIST_KM = {
+    ("Facility", "Waterloo") : 18,
+    ("Facility", "Kitchener"): 22,
+    ("Facility", "Guelph")   : 20,
+    ("Facility", "Cambridge"): 18,
+    ("Waterloo", "Kitchener"): 14,
+    ("Waterloo", "Guelph")   : 27,
+    ("Waterloo", "Cambridge"): 30,
+    ("Kitchener","Guelph")   : 28,
+    ("Kitchener","Cambridge"): 21,
+    ("Guelph",   "Cambridge"): 24,
+}
 
-def road_km(c1, c2):
-    return haversine_km(c1, c2) * ROAD_FACTOR
+def road_km(a, b):
+    """Look up real road distance in km (symmetric matrix)."""
+    if a == b:
+        return 0
+    return ROAD_DIST_KM.get((a, b)) or ROAD_DIST_KM.get((b, a))
 
-def drive_min(c1, c2):
-    return (road_km(c1, c2) / TRUCK_SPEED_KPH) * 60
+def drive_min(a, b):
+    """Drive time in minutes at TRUCK_SPEED_KPH."""
+    return (road_km(a, b) / TRUCK_SPEED_KPH) * 60
 
 # ============================================================
-# SECTION 4: WASTE PROFILE  (single-visit policy)
+# SECTION 4: WASTE PROFILE  (Guelph-reference proportional model)
 # ============================================================
 
 def compute_waste_profile():
     """
-    Single-visit policy: each store is visited exactly ONCE per week.
-    All weekly waste is collected in that one visit.
-    If weekly_kg > TRUCK_CAPACITY_KG, the truck makes multiple
-    Facility → Store → Facility runs on that day.
+    Guelph store manager confirmed 1,000 kg/week.
+    All other stores are scaled proportionally by floor area:
 
-      weekly_kg       = size_sqft × waste_rate_kg_per_sqft_per_week
-      loads_per_visit = ceil(weekly_kg / TRUCK_CAPACITY_KG)
-      waste_per_load  = weekly_kg / loads_per_visit  [≤ TRUCK_CAPACITY_KG]
+      kg_per_sqft = REFERENCE_WEEKLY_KG / guelph_sqft
+      store_kg    = store_sqft * kg_per_sqft
+                  = (store_sqft / guelph_sqft) * 1,000
 
-    Changing TRUCK_CAPACITY_KG automatically adjusts loads_per_visit
-    for every store — no other code needs to change.
+    Assumption: identical waste intensity per sqft (same Farm Boy
+    format, same product categories across the cluster).
+
+    With the current 3,000 kg truck, every store fits in 1 load/visit.
+    If TRUCK_CAPACITY_KG is reduced, loads_per_visit auto-updates.
     """
+    ref_sqft    = STORES[REFERENCE_STORE]["size_sqft"]
+    kg_per_sqft = REFERENCE_WEEKLY_KG / ref_sqft
     profile = {}
     for store, data in STORES.items():
-        weekly_kg       = data["size_sqft"] * data["waste_rate_kg_per_sqft_per_week"]
-        loads_per_visit = ceil(weekly_kg / TRUCK_CAPACITY_KG)
-        waste_per_load  = weekly_kg / loads_per_visit
+        wk    = data["size_sqft"] * kg_per_sqft
+        loads = ceil(wk / TRUCK_CAPACITY_KG)
         profile[store] = {
-            "weekly_kg"      : round(weekly_kg, 1),
-            "loads_per_visit": loads_per_visit,
-            "waste_per_load" : round(waste_per_load, 1),
-            "collected_kg"   : round(weekly_kg, 1),   # may shrink if partial
+            "weekly_kg"      : round(wk, 1),
+            "loads_per_visit": loads,
+            "waste_per_load" : round(wk / loads, 1),
+            "collected_kg"   : round(wk, 1),
             "deferred_kg"    : 0.0,
-            "partial"        : False,
             "status_flag"    : "OK",
-            "collection_day" : None,
+            "bins_allocated" : 0,
         }
     return profile
 
 # ============================================================
-# SECTION 5: EXACT TSP SOLVER  (unchanged)
+# SECTION 5: BIN & FACILITY STATUS CHECKERS
 # ============================================================
 
-def solve_tsp(store_list, origin_coord):
+def bin_status(bins_used_this_week):
     """
-    Brute-force exact TSP: origin → [perm of stores] → origin.
-    Feasible for ≤ 8 nodes (8! = 40,320 permutations, milliseconds).
-    Returns (ordered_store_list, total_road_km).
+    Returns (status_label, alert_message, fill_ratio).
+    Based on bins_used_this_week / AVAILABLE_BINS.
+
+    Bands: NORMAL [0–50%) | WARNING [50–75%) | CAUTION [75–90%)
+           CRITICAL [90–100%) | FULL [100%+) | NO_BINS [available=0)
     """
-    if len(store_list) == 1:
-        d = road_km(origin_coord, STORES[store_list[0]]["coords"]) * 2
-        return store_list, round(d, 2)
-    best_d, best_r = float("inf"), None
-    for perm in itertools.permutations(store_list):
-        d = road_km(origin_coord, STORES[perm[0]]["coords"])
-        for i in range(len(perm) - 1):
-            d += road_km(STORES[perm[i]]["coords"], STORES[perm[i+1]]["coords"])
-        d += road_km(STORES[perm[-1]]["coords"], origin_coord)
-        if d < best_d:
-            best_d, best_r = d, list(perm)
-    return best_r, round(best_d, 2)
-
-# ============================================================
-# SECTION 6: FACILITY STATUS CHECKER 
-# ============================================================
-
-def facility_status(current_fill_kg):
-    """
-    Returns (status_label, fill_ratio, alert_message).
-
-    Bands:
-      NORMAL   [0%  – 50%)  — intake capacity freely available.
-      WARNING  [50% – 75%)  — facility past half; plan ahead.
-      CAUTION  [75% – 90%)  — significant fill; review schedule.
-      CRITICAL [90% – 100%) — approaching limit; immediate review.
-      FULL     [100%+)      — hard stop; no further intake this week.
-
-    Usage: call before every store collection to decide whether to
-    proceed, partially collect, or defer entirely.
-    """
-    ratio = current_fill_kg / FACILITY_CAPACITY_KG
+    if AVAILABLE_BINS == 0:
+        return "NO_BINS", "🚫 NO BINS AVAILABLE — all bins occupied from prior cycle.", 1.0
+    ratio     = bins_used_this_week / AVAILABLE_BINS
+    remaining = AVAILABLE_BINS - bins_used_this_week
     if ratio >= 1.0:
-        return "FULL",     ratio, "🚫 FACILITY FULL — no further intake possible this week."
-    if ratio >= FILL_CRITICAL:
-        return "CRITICAL", ratio, f"🔴 CRITICAL ({ratio*100:.1f}%) — approaching limit. Review immediately."
-    if ratio >= FILL_CAUTION:
-        return "CAUTION",  ratio, f"🟠 CAUTION ({ratio*100:.1f}%) — significant fill. Monitor closely."
-    if ratio >= FILL_WARN:
-        return "WARNING",  ratio, f"🟡 WARNING ({ratio*100:.1f}%) — facility past half capacity."
-    return     "NORMAL",   ratio, f"🟢 NORMAL ({ratio*100:.1f}%) — intake capacity available."
+        return "FULL",    f"🚫 BINS FULL — all {AVAILABLE_BINS} available bins occupied.", ratio
+    if ratio >= BINS_CRITICAL:
+        return "CRITICAL",f"🔴 CRITICAL ({ratio*100:.1f}%) — only {remaining} bin(s) left.", ratio
+    if ratio >= BINS_CAUTION:
+        return "CAUTION", f"🟠 CAUTION ({ratio*100:.1f}%) — {remaining} bins left.", ratio
+    if ratio >= BINS_WARN:
+        return "WARNING",  f"🟡 WARNING ({ratio*100:.1f}%) — past half bin capacity.", ratio
+    return "NORMAL",       f"🟢 NORMAL ({ratio*100:.1f}%) — {remaining} bins available.", ratio
 
 # ============================================================
-# SECTION 7: WEEKLY SCHEDULER  
+# SECTION 6: TRIP PAIRING OPTIMIZER
 # ============================================================
 
-def build_schedule(profile):
+def find_optimal_pairing():
     """
-    Assigns each store exactly one collection day (Mon – Thu).
-    Friday is reserved as a buffer / facility processing day.
+    Partition the 4 stores into 2 pairs of 2.
+    C(4,2) / 2 = 3 unique unordered pairings.
 
-    Stores sorted by weekly_kg DESC so the heaviest loads arrive when
-    the facility is emptiest (start of week), leaving buffer room.
+    Algorithm:
+      Fix stores[0] in pair1; vary its partner → 3 pairings.
+      For each pair, evaluate both orderings:
+        Facility → A → B → Facility  vs  Facility → B → A → Facility
+      Select minimum-distance ordering per pair.
+      Choose the pairing with the smallest combined total km.
 
-    Three capacity gates applied for every store in sequence:
-
-      Gate 1 — FACILITY_FULL
-        Facility at 100%+ → store collection deferred to next week.
-        Flag: CRITICAL / FACILITY_FULL.
-
-      Gate 2 — PARTIAL_COLLECTION
-        Facility has remaining space < store's weekly_kg.
-        Truck collects only what fits; deficit is flagged as deferred.
-        Flag: WARNING / PARTIAL_COLLECTION.
-
-      Gate 3 — OVERTIME_RISK
-        Estimated day time (N loads × round-trip + loading) > WORKING_HOURS_MIN.
-        Collection still proceeds; flag raised for operator awareness.
-        Flag: WARNING / OVERTIME_RISK.
-
-    Edge cases:
-      • If >4 stores exist, overflow stores share Thursday (day index 3).
-      • If all stores are deferred (facility full from start), a
-        BUFFER_DAY_NEEDED critical flag is raised.
-      • FACILITY_CURRENT_FILL_KG can be set to any non-zero value to
-        simulate mid-week or pre-filled facility states.
+    Winning pairing (calculated):
+      (Waterloo + Kitchener) & (Guelph + Cambridge) = 116 km/week
+      Geographic rationale: W↔K = 14 km (neighbouring cities);
+      G↔C = 24 km (nearest pair east of the cluster).
     """
-    schedule = defaultdict(list)
-    flags    = []
-    fill     = FACILITY_CURRENT_FILL_KG
+    stores  = list(STORES.keys())
+    unique  = [
+        ([stores[0], stores[i]], [s for s in stores if s not in [stores[0], stores[i]]])
+        for i in range(1, len(stores))
+    ]
+    best_total = float("inf")
+    best_result = None
+    comparison  = []
 
-    sorted_stores = sorted(
-        profile.items(), key=lambda x: x[1]["weekly_kg"], reverse=True
-    )
+    for p1, p2 in unique:
+        trips = []
+        total = 0
+        for pair in [p1, p2]:
+            a, b = pair
+            fwd = road_km("Facility",a) + road_km(a,b) + road_km(b,"Facility")
+            rev = road_km("Facility",b) + road_km(b,a) + road_km(a,"Facility")
+            if fwd <= rev:
+                trips.append({"stores":[a,b], "distance_km":round(fwd,1),
+                               "order":f"Facility → {a} → {b} → Facility"})
+            else:
+                trips.append({"stores":[b,a], "distance_km":round(rev,1),
+                               "order":f"Facility → {b} → {a} → Facility"})
+            total += min(fwd, rev)
+        total = round(total, 1)
+        comparison.append({
+            "pairing" : f"({p1[0]} + {p1[1]}) & ({p2[0]} + {p2[1]})",
+            "total_km": total,
+        })
+        if total < best_total:
+            best_total  = total
+            best_result = {"trips": trips, "total_km": total}
 
-    day_idx = 0   # Mon=0 … Thu=3; Fri=4 reserved as buffer
+    for row in comparison:
+        row["chosen"] = (row["total_km"] == best_result["total_km"])
+    best_result["comparison"] = comparison
+    return best_result
 
-    for store, info in sorted_stores:
+# ============================================================
+# SECTION 7: SCHEDULER  (bin-aware, Mon + Thu)
+# ============================================================
 
-        # ── Gate 1: facility already full? ──────────────────────────
-        status, ratio, _ = facility_status(fill)
-        if status == "FULL":
-            info.update({
-                "status_flag"   : "DEFERRED — FACILITY FULL",
-                "collection_day": "DEFERRED",
-                "collected_kg"  : 0.0,
-                "deferred_kg"   : info["weekly_kg"],
-            })
+def build_schedule(pairing, profile):
+    """
+    Assigns trips to days:
+      step = ceil(DAYS_PER_WEEK / TRIPS_PER_WEEK) = ceil(5/2) = 3
+      → Trip 1: Monday (day 0), Trip 2: Thursday (day 3)
+      → 3-day gap between trips.
+
+    Three capacity gates (bin-aware):
+      Gate 1  NO_BINS_AVAILABLE
+        All available bins are already used → trip deferred.
+        Flag: CRITICAL / NO_BINS_AVAILABLE.
+
+      Gate 2  PARTIAL_BIN_LIMIT
+        Remaining bins × WEIGHT_PER_BIN_KG < trip waste.
+        Collect only what fits; remaining kg flagged as deferred.
+        Waste split proportionally by store sqft.
+        Flag: WARNING / PARTIAL_BIN_LIMIT.
+
+      Gate 3  OVERTIME_RISK
+        Estimated trip time > WORKING_HOURS_MIN.
+        Collection proceeds; operator alerted.
+        Flag: INFO / OVERTIME_RISK.
+
+    Bin tracking:
+      bins_used_week  increments after each successful trip.
+      bins_left_after stored per trip for the report.
+    """
+    step      = ceil(DAYS_PER_WEEK / TRIPS_PER_WEEK)           # = 3
+    trip_days = [min(i * step, DAYS_PER_WEEK - 1) for i in range(TRIPS_PER_WEEK)]
+    schedule  = {}
+    flags     = []
+    bins_used = 0
+
+    for i, trip in enumerate(pairing["trips"]):
+        day    = trip_days[i]
+        stores = trip["stores"]
+        waste  = sum(profile[s]["weekly_kg"] for s in stores)
+
+        bins_needed = ceil(waste / WEIGHT_PER_BIN_KG)
+        bins_left   = AVAILABLE_BINS - bins_used
+
+        # ── Gate 1: No bins left ─────────────────────────────
+        if bins_left <= 0:
+            for s in stores:
+                profile[s].update({
+                    "status_flag" : "DEFERRED — NO BINS",
+                    "collected_kg": 0.0,
+                    "deferred_kg" : profile[s]["weekly_kg"],
+                })
             flags.append({
                 "severity": "CRITICAL",
-                "type"    : "FACILITY_FULL",
-                "store"   : store,
-                "detail"  : (f"Facility at {ratio*100:.1f}% capacity. "
-                             f"{info['weekly_kg']:,.0f} kg fully deferred."),
+                "type"    : "NO_BINS_AVAILABLE",
+                "detail"  : f"Trip {i+1} fully deferred — 0 bins remaining.",
             })
+            schedule[i] = {**trip, "day":DAY_NAMES[day], "skipped":True,
+                           "waste_kg":0, "bins_needed":0, "bins_left_after":0}
             continue
 
-        # ── Gate 2: partial capacity remaining? ─────────────────────
-        remaining = FACILITY_CAPACITY_KG - fill
-        if remaining < info["weekly_kg"]:
-            new_loads = ceil(remaining / TRUCK_CAPACITY_KG)
-            info.update({
-                "collected_kg"   : round(remaining, 1),
-                "deferred_kg"    : round(info["weekly_kg"] - remaining, 1),
-                "loads_per_visit": new_loads,
-                "waste_per_load" : round(remaining / max(1, new_loads), 1),
-                "partial"        : True,
-                "status_flag"    : "PARTIAL COLLECTION",
-            })
+        # ── Gate 2: Partial bin capacity ─────────────────────
+        if bins_needed > bins_left:
+            collectible_kg = bins_left * WEIGHT_PER_BIN_KG
             flags.append({
                 "severity": "WARNING",
-                "type"    : "PARTIAL_COLLECTION",
-                "store"   : store,
-                "detail"  : (f"Only {remaining:,.0f} kg space available; "
-                             f"{info['collected_kg']:,.0f} kg collected, "
-                             f"{info['deferred_kg']:,.0f} kg deferred."),
+                "type"    : "PARTIAL_BIN_LIMIT",
+                "detail"  : (f"Trip {i+1}: only {bins_left} bin(s) left "
+                             f"({collectible_kg:,} kg capacity) vs "
+                             f"{bins_needed} needed for {waste:,.0f} kg. "
+                             f"Partial collection — waste split by store sqft."),
             })
-            fill += remaining
-        else:
-            fill += info["weekly_kg"]
+            # Distribute collectible kg proportionally by store sqft
+            total_sqft = sum(STORES[s]["size_sqft"] for s in stores)
+            for s in stores:
+                frac = STORES[s]["size_sqft"] / total_sqft
+                profile[s]["collected_kg"] = round(collectible_kg * frac, 1)
+                profile[s]["deferred_kg"]  = round(profile[s]["weekly_kg"]
+                                                    - profile[s]["collected_kg"], 1)
+                profile[s]["status_flag"]  = "PARTIAL COLLECTION"
+            waste        = collectible_kg
+            bins_needed  = bins_left
 
-        # ── Overflow: >4 stores all land on Thursday ─────────────────
-        if day_idx > 3:
-            day_idx = 3
+        # ── Allocate bins per store ───────────────────────────
+        for s in stores:
+            profile[s]["bins_allocated"] = ceil(profile[s]["collected_kg"] / WEIGHT_PER_BIN_KG)
+        bins_used += bins_needed
 
-        # ── Gate 3: overtime risk? ────────────────────────────────────
-        fac_c   = FACILITY["coords"]
-        leg_min = drive_min(fac_c, STORES[store]["coords"]) * 2 + LOADING_TIME_MIN
-        est_min = info["loads_per_visit"] * leg_min
-        if est_min > WORKING_HOURS_MIN:
+        # ── Bin level check after this trip ──────────────────
+        bstat, bmsg, bratio = bin_status(bins_used)
+        if bstat in ("CRITICAL", "FULL"):
             flags.append({
                 "severity": "WARNING",
+                "type"    : f"BIN_LEVEL_{bstat}",
+                "detail"  : f"After Trip {i+1}: {bmsg}",
+            })
+
+        # ── Gate 3: Overtime ─────────────────────────────────
+        drive = (drive_min("Facility", stores[0])
+                 + drive_min(stores[0], stores[1])
+                 + drive_min(stores[1], "Facility"))
+        load  = LOADING_TIME_MIN * len(stores)
+        total = drive + load
+        if total > WORKING_HOURS_MIN:
+            flags.append({
+                "severity": "INFO",
                 "type"    : "OVERTIME_RISK",
-                "store"   : store,
-                "detail"  : (f"Est. {est_min:.0f} min ({est_min/60:.1f} hrs) for "
-                             f"{info['loads_per_visit']} loads — exceeds "
-                             f"{WORKING_HOURS_MIN // 60}-hr workday cap."),
+                "detail"  : (f"Trip {i+1}: est. {total:.0f} min ({total/60:.1f} hrs) "
+                             f"exceeds {WORKING_HOURS_MIN // 60}-hr cap."),
             })
-            if not info["partial"]:
-                info["status_flag"] = "OVERTIME RISK"
 
-        schedule[day_idx].append(store)
-        info["collection_day"] = DAY_NAMES[day_idx]
-        day_idx += 1
+        schedule[i] = {
+            **trip,
+            "day"            : DAY_NAMES[day],
+            "skipped"        : False,
+            "drive_min"      : round(drive, 1),
+            "load_min"       : load,
+            "total_min"      : round(total, 1),
+            "waste_kg"       : round(waste, 1),
+            "truck_util_pct" : round(waste / TRUCK_CAPACITY_KG * 100, 1),
+            "bins_needed"    : bins_needed,
+            "bins_left_after": AVAILABLE_BINS - bins_used,
+            "overtime"       : total > WORKING_HOURS_MIN,
+        }
 
-    # Friday buffer: raise critical flag if any store was deferred
-    deferred = [s for s, i in profile.items() if i["collection_day"] == "DEFERRED"]
-    if deferred:
-        flags.append({
-            "severity": "CRITICAL",
-            "type"    : "BUFFER_DAY_NEEDED",
-            "store"   : ", ".join(deferred),
-            "detail"  : ("Friday buffer day required for deferred collections. "
-                         "Increase FACILITY_CAPACITY_KG or reduce weekly intake."),
-        })
-
-    return schedule, flags, fill
+    return schedule, flags, bins_used
 
 # ============================================================
-# SECTION 8: DAILY ROUTE BUILDER  (single-visit split-load)
+# SECTION 8: SPLIT-LOAD HANDLER  (edge-case utility)
 # ============================================================
+#
+# With current waste volumes (~870–1,057 kg/store) and a 3,000 kg
+# truck, every store fits in a single load.
+#
+# If TRUCK_CAPACITY_KG is reduced (e.g. to 500 kg for a smaller
+# vehicle), loads_per_visit > 1 triggers split-load runs:
+#   Each extra load: Facility → Store → Facility
+#   Extra km  = (loads-1) × 2 × road_km(Facility, store)
+#   Extra min = (loads-1) × (2 × drive_min + LOADING_TIME_MIN)
 
-def build_daily_routes(schedule, profile):
-    """
-    For each day with stores assigned:
-
-    Single-store day (typical — one store per day policy):
-      Truck makes N = loads_per_visit runs of:
-          Facility → Store → Facility
-      Total distance = N × 2 × one_way_km
-      Total time     = N × (2 × drive_min + LOADING_TIME_MIN)
-
-    Multi-store day (edge case — e.g., overflow stores share a day):
-      TSP finds the optimal visit order for one circuit.
-      If stores need different numbers of loads, extra-load stores
-      get additional dedicated Facility → Store → Facility runs
-      after the shared circuit completes.
-
-    overtime flag raised if total_time > WORKING_HOURS_MIN.
-    """
-    fac    = FACILITY["coords"]
-    routes = []
-
-    for day_idx in range(DAYS_PER_WEEK):
-        stores_today = schedule.get(day_idx, [])
-
-        if not stores_today:
-            routes.append({
-                "day"         : DAY_NAMES[day_idx],
-                "stores"      : [],
-                "route_order" : [],
-                "distance_km" : 0,
-                "time_min"    : 0,
-                "loads_detail": [],
-                "overtime"    : False,
-            })
-            continue
-
-        route_order, _ = solve_tsp(stores_today, fac)
-        total_dist = 0.0
-        total_min  = 0.0
-        loads_detail = []
-
-        if len(stores_today) == 1:
-            # ── Normal case: dedicated single-store day ──────────────
-            s   = stores_today[0]
-            n   = profile[s]["loads_per_visit"]
-            leg = road_km(fac, STORES[s]["coords"]) * 2
-            total_dist = round(n * leg, 2)
-            total_min  = n * (drive_min(fac, STORES[s]["coords"]) * 2 + LOADING_TIME_MIN)
-            loads_detail.append({
-                "store"      : s,
-                "loads"      : n,
-                "kg_each"    : profile[s]["waste_per_load"],
-                "total_kg"   : profile[s]["collected_kg"],
-                "one_way_km" : round(leg / 2, 2),
-            })
-        else:
-            # ── Edge case: multiple stores share a day ───────────────
-            # Run load cycles; stores drop out once their loads are served
-            max_loads = max(profile[s]["loads_per_visit"] for s in stores_today)
-            for cycle in range(max_loads):
-                in_cycle = [s for s in route_order
-                            if profile[s]["loads_per_visit"] > cycle]
-                if not in_cycle:
-                    break
-                _, cd = solve_tsp(in_cycle, fac)
-                total_dist += cd
-                total_min  += (cd / TRUCK_SPEED_KPH * 60
-                               + len(in_cycle) * LOADING_TIME_MIN)
-            total_dist = round(total_dist, 2)
-            for s in stores_today:
-                loads_detail.append({
-                    "store"      : s,
-                    "loads"      : profile[s]["loads_per_visit"],
-                    "kg_each"    : profile[s]["waste_per_load"],
-                    "total_kg"   : profile[s]["collected_kg"],
-                    "one_way_km" : round(road_km(fac, STORES[s]["coords"]), 2),
-                })
-
-        overtime = total_min > WORKING_HOURS_MIN
-        routes.append({
-            "day"         : DAY_NAMES[day_idx],
-            "stores"      : stores_today,
-            "route_order" : route_order,
-            "distance_km" : total_dist,
-            "time_min"    : round(total_min, 1),
-            "loads_detail": loads_detail,
-            "overtime"    : overtime,
-        })
-
-    return routes
-
-# ============================================================
-# SECTION 9: SPLIT-TRIP OVERHEAD UTILITY  (retained)
-# ============================================================
-
-def compute_split_trip_overhead(store, loads):
-    """
-    Returns (extra_km, extra_min) for loads 2..N of a single store.
-    Load 1 is already included in the base route calculation.
-    """
-    fac         = FACILITY["coords"]
-    extra_loads = loads - 1
-    leg_km      = road_km(fac, STORES[store]["coords"]) * 2
-    extra_km    = round(extra_loads * leg_km, 2)
-    extra_min   = round(
-        extra_loads * (drive_min(fac, STORES[store]["coords"]) * 2 + LOADING_TIME_MIN), 1
-    )
+def compute_split_overhead(store, loads):
+    extra     = loads - 1
+    extra_km  = round(extra * road_km("Facility", store) * 2, 1)
+    extra_min = round(extra * (drive_min("Facility", store) * 2 + LOADING_TIME_MIN), 1)
     return extra_km, extra_min
 
 # ============================================================
-# SECTION 10: CONSOLE REPORT
+# SECTION 9: CONSOLE REPORT
 # ============================================================
 
-def print_report(profile, routes, flags, final_fill):
+def print_report(profile, schedule, flags, total_bins_used, pairing):
     SEP  = "=" * 72
-    SEP2 = "-" * 68
+    SEP2 = "-" * 67
+
+    bstat_f, bmsg_f, bratio_f = bin_status(total_bins_used)
 
     print(f"\n{SEP}")
     print("  FARM BOY × BSF WASTE COLLECTION SYSTEM")
     print(SEP)
 
-    # ── Facility status ───────────────────────────────────────────────
-    s0, r0, _  = facility_status(FACILITY_CURRENT_FILL_KG)
-    sF, rF, mF = facility_status(final_fill)
-    print(f"\n  BSF FACILITY STATUS")
+    # ── Bin Inventory ─────────────────────────────────────────────────
+    print(f"\n  BSF FACILITY — LARVAE BIN INVENTORY")
     print(f"  {SEP2}")
-    print(f"  Name     : {FACILITY['name']}")
-    print(f"  Address  : {FACILITY['address']}")
-    print(f"  Capacity : {FACILITY_CAPACITY_KG:>10,} kg / week")
-    print(f"  Fill (start of week) : {FACILITY_CURRENT_FILL_KG:>10,} kg  "
-          f"({r0*100:.1f}%)  [{s0}]")
-    print(f"  Fill (after collect) : {final_fill:>10,.1f} kg  "
-          f"({rF*100:.1f}%)  [{sF}]")
-    print(f"  Status   : {mF}")
+    print(f"  Name      : {FACILITY['name']}")
+    print(f"  Address   : {FACILITY['address']}")
+    print(f"  ─── Bin Specs ─────────────────────────────────────────────────")
+    print(f"  Total bins             : {TOTAL_BINS}")
+    print(f"  Weight per bin         : {WEIGHT_PER_BIN_KG} kg  "
+          f"(200 L commercial BSFL container)")
+    print(f"  Total bin capacity     : {TOTAL_BIN_CAPACITY_KG:,} kg  "
+          f"({TOTAL_BINS} × {WEIGHT_PER_BIN_KG} kg)")
+    print(f"  ─── Weekly State ──────────────────────────────────────────────")
+    print(f"  Bins in use (prior larval cycle) : {BINS_IN_USE}  "
+          f"← larvae still processing (~12-day cycle)")
+    print(f"  Available bins this week         : {AVAILABLE_BINS}  "
+          f"({AVAILABLE_BIN_CAPACITY_KG:,} kg capacity)")
+    print(f"  Bins filled this week            : {total_bins_used}")
+    print(f"  Bins remaining after collections : {AVAILABLE_BINS - total_bins_used}")
+    print(f"  Bin utilisation                  : {total_bins_used}/{AVAILABLE_BINS}  "
+          f"({bratio_f*100:.1f}%)")
+    print(f"  Status                           : {bmsg_f}")
 
-    # ── Alerts ───────────────────────────────────────────────────────
+    # ── Alerts ────────────────────────────────────────────────────────
     if flags:
         print(f"\n  ⚠  ALERTS & FLAGS  ({len(flags)} total)")
         print(f"  {SEP2}")
         for fl in flags:
-            icon = {"CRITICAL": "🔴", "WARNING": "🟡", "INFO": "🔵"}.get(fl["severity"], "⚪")
-            print(f"  {icon} [{fl['severity']}]  {fl['type']}  —  {fl['store']}")
-            print(f"         {fl['detail']}")
+            icon = {"CRITICAL":"🔴","WARNING":"🟡","INFO":"🔵"}.get(fl["severity"],"⚪")
+            print(f"  {icon} [{fl['severity']}]  {fl['type']}")
+            print(f"       {fl['detail']}")
 
-    # ── Store profiles ────────────────────────────────────────────────
-    print(f"\n\n  STORE WASTE PROFILES  (1 visit / store / week)")
+    # ── Waste Profile ─────────────────────────────────────────────────
+    ref_sqft    = STORES[REFERENCE_STORE]["size_sqft"]
+    kg_per_sqft = REFERENCE_WEEKLY_KG / ref_sqft
+    print(f"\n\n  WASTE PROFILE  (Guelph reference — store-manager confirmed)")
     print(f"  {SEP2}")
-    print(f"  {'Store':<12} {'sqft':>7} {'kg/wk':>9} {'Loads':>6} "
-          f"{'kg/load':>8} {'Collected':>10} {'Deferred':>9}  Day         Status")
-    print("  " + "-" * 90)
+    print(f"  Reference : {REFERENCE_STORE}  {ref_sqft:,} sqft  →  "
+          f"{REFERENCE_WEEKLY_KG:,} kg/week")
+    print(f"  Rate      : {kg_per_sqft:.6f} kg/sqft/week  "
+          f"(uniform across cluster — same Farm Boy format)")
+    print(f"  Formula   : weekly_kg = (store_sqft / {ref_sqft:,}) × {REFERENCE_WEEKLY_KG:,}\n")
+    print(f"  {'Store':<12} {'sqft':>7} {'size ratio':>11} "
+          f"{'kg/week':>9} {'Loads':>6} {'Bins':>5}  Assigned trip")
+    print("  " + "-" * 68)
     for store, info in profile.items():
+        ratio     = STORES[store]["size_sqft"] / ref_sqft
+        trip_label = next(
+            (f"Trip {tid+1} ({t['day']})" for tid,t in schedule.items()
+             if store in t["stores"] and not t.get("skipped")),
+            "DEFERRED"
+        )
         flag_tag = f"  ← {info['status_flag']}" if info["status_flag"] != "OK" else ""
-        print(f"  {store:<12} {STORES[store]['size_sqft']:>7,} "
-              f"{info['weekly_kg']:>9,.1f} {info['loads_per_visit']:>6} "
-              f"{info['waste_per_load']:>8,.1f} {info['collected_kg']:>10,.1f} "
-              f"{info['deferred_kg']:>9,.1f}  "
-              f"{str(info.get('collection_day','—')):<12}{flag_tag}")
+        print(f"  {store:<12} {STORES[store]['size_sqft']:>7,} {ratio:>11.4f} "
+              f"{info['weekly_kg']:>9.1f} {info['loads_per_visit']:>6} "
+              f"{info['bins_allocated']:>5}  {trip_label}{flag_tag}")
 
-    print(f"\n  Truck capacity  : {TRUCK_CAPACITY_KG:,} kg / load  "
-          f"← change TRUCK_CAPACITY_KG to resize truck")
-    print(f"  Truck speed     : {TRUCK_SPEED_KPH} km/h  |  "
-          f"Load/unload: {LOADING_TIME_MIN} min/stop  |  Road factor: {ROAD_FACTOR}×")
-    print(f"  Workday cap     : {WORKING_HOURS_MIN} min ({WORKING_HOURS_MIN // 60} hrs)")
+    print(f"\n  Total weekly waste : {sum(i['weekly_kg'] for i in profile.values()):,.1f} kg")
+    print(f"  Truck capacity     : {TRUCK_CAPACITY_KG:,} kg  "
+          f"(all stores fit in 1 load each at current volumes)")
 
-    # ── Weekly schedule ───────────────────────────────────────────────
+    # ── Pairing Comparison ────────────────────────────────────────────
+    print(f"\n\n  PAIRING OPTIMIZER — all 3 unique combinations evaluated")
+    print(f"  {SEP2}")
+    for row in pairing["comparison"]:
+        mark = "  ← SELECTED (minimum distance)" if row["chosen"] else ""
+        print(f"  {row['pairing']:<48} {row['total_km']:>6.1f} km{mark}")
+
+    # ── Schedule ──────────────────────────────────────────────────────
     print(f"\n\n{SEP}")
-    print("  WEEKLY COLLECTION SCHEDULE  (1 visit/store/week — split loads to BSF facility)")
+    print(f"  WEEKLY SCHEDULE  (2 trips — Monday + Thursday, 3-day gap)")
     print(SEP)
 
-    for route in routes:
-        ot_tag = "  ⚠ OVERTIME" if route["overtime"] else ""
-        print(f"\n  {route['day'].upper()}{ot_tag}")
-        print("  " + "─" * 64)
-
-        if not route["stores"]:
-            print("  [Buffer / BSF facility processing day — no collections]")
+    for tid, trip in schedule.items():
+        if trip.get("skipped"):
+            print(f"\n  TRIP {tid+1} — {trip['day'].upper()}  "
+                  f"🔴 SKIPPED — no bins available")
             continue
 
-        for ld in route["loads_detail"]:
-            s, n = ld["store"], ld["loads"]
-            print(f"  Store      : {s}")
-            print(f"  Route      : Facility → {s} → Facility  ×{n} load(s)")
-            print(f"  One-way    : {ld['one_way_km']:.1f} km  |  "
-                  f"Round-trip/load: {ld['one_way_km']*2:.1f} km")
-            print(f"  Waste      : {ld['total_kg']:,.1f} kg total  "
-                  f"({n} × {ld['kg_each']:,.1f} kg / load)")
-            if profile[s].get("partial"):
-                print(f"  ⚠ PARTIAL : {profile[s]['deferred_kg']:,.1f} kg NOT collected "
-                      f"(facility capacity limit reached)")
-            print()
+        ot  = "  ⚠ OVERTIME" if trip["overtime"] else ""
+        s0_, s1_ = trip["stores"]
+        print(f"\n  TRIP {tid+1} — {trip['day'].upper()}{ot}")
+        print("  " + "─" * 66)
+        print(f"  Route      : {trip['order']}")
+        print(f"  Legs       : Facility → {s0_}: {road_km('Facility',s0_)} km  |  "
+              f"{s0_} → {s1_}: {road_km(s0_,s1_)} km  |  "
+              f"{s1_} → Facility: {road_km(s1_,'Facility')} km")
+        print(f"  Distance   : {trip['distance_km']} km  (real road, semi-truck route)")
+        print(f"  Time       : {trip['drive_min']:.0f} min drive  +  "
+              f"{trip['load_min']} min loading  =  "
+              f"{trip['total_min']:.0f} min ({trip['total_min']/60:.1f} hrs)")
+        print(f"  Waste      : {trip['waste_kg']:,.1f} kg  |  "
+              f"Truck utilization: {trip['truck_util_pct']:.1f}%")
+        print(f"  Bins used  : {trip['bins_needed']}  |  "
+              f"Bins remaining after trip: {trip['bins_left_after']}")
+        for s in trip["stores"]:
+            print(f"    └─ {s:<12} : {profile[s]['weekly_kg']:>7.1f} kg  "
+                  f"({profile[s]['bins_allocated']} bin(s))")
 
-        print(f"  Day total  : {route['distance_km']:.1f} km  |  "
-              f"{route['time_min']:.0f} min ({route['time_min']/60:.1f} hrs){ot_tag}")
-
-    # ── Weekly totals ─────────────────────────────────────────────────
-    total_km        = sum(r["distance_km"] for r in routes)
-    total_min       = sum(r["time_min"]    for r in routes)
-    total_collected = sum(i["collected_kg"] for i in profile.values())
-    total_deferred  = sum(i["deferred_kg"]  for i in profile.values())
+    # ── Weekly Totals ─────────────────────────────────────────────────
+    total_km    = sum(t["distance_km"] for t in schedule.values())
+    total_min   = sum(t["total_min"]   for t in schedule.values())
+    total_wk    = sum(p["weekly_kg"]   for p in profile.values())
+    total_def   = sum(p["deferred_kg"] for p in profile.values())
 
     print(f"\n{SEP}")
     print("  WEEKLY TOTALS")
-    print(f"  Total route distance   : {total_km:.1f} km")
-    print(f"  Total operational time : {total_min / 60:.1f} hrs")
-    print(f"  Total waste collected  : {total_collected:,.0f} kg")
-    if total_deferred > 0:
-        print(f"  ⚠  Waste deferred      : {total_deferred:,.0f} kg  "
-              f"← facility capacity exceeded")
-    print(f"  Facility fill (end)    : {final_fill:,.0f} / {FACILITY_CAPACITY_KG:,} kg  "
-          f"({final_fill / FACILITY_CAPACITY_KG * 100:.1f}%)")
+    print(f"  Distance         : {total_km:.1f} km  ({TRIPS_PER_WEEK} trips)")
+    print(f"  Operational time : {total_min:.0f} min  ({total_min/60:.1f} hrs combined)")
+    print(f"  Waste collected  : {total_wk - total_def:,.1f} kg")
+    if total_def > 0:
+        print(f"  ⚠  Waste deferred: {total_def:,.1f} kg")
+    print(f"  Bin utilisation  : {total_bins_used} / {AVAILABLE_BINS}  "
+          f"({bratio_f*100:.1f}%)  {bmsg_f}")
+    print(f"  Bin summary      : {TOTAL_BINS} total  |  "
+          f"{BINS_IN_USE} in active larval cycle  |  "
+          f"{AVAILABLE_BINS - total_bins_used} free after week")
     print(SEP)
 
 # ============================================================
-# SECTION 11: INTERACTIVE MAP  (BSF facility + capacity bar)
+# SECTION 10: INTERACTIVE MAP
 # ============================================================
 
-def generate_map(profile, routes, final_fill):
-    ROUTE_COLORS = ["#e74c3c", "#3498db", "#2ecc71", "#f39c12", "#9b59b6"]
-    fac_coord    = FACILITY["coords"]
+def generate_map(profile, schedule, total_bins_used):
+    ROUTE_COLORS = ["#e74c3c", "#3498db"]
+    fac_c = FACILITY["coords"]
+    bstat_f, bmsg_f, bratio_f = bin_status(total_bins_used)
 
     m = folium.Map(location=[43.46, -80.39], zoom_start=11)
 
     # ── BSF Facility marker ──────────────────────────────────────────
-    _, ratio_end, _ = facility_status(final_fill)
     fac_popup = (
         f"<b>{FACILITY['name']}</b><br>"
         f"{FACILITY['address']}<br><br>"
-        f"Weekly capacity : {FACILITY_CAPACITY_KG:,} kg<br>"
-        f"Fill after week : {final_fill:,.0f} kg ({ratio_end*100:.1f}%)"
+        f"<b>Bin Inventory</b><br>"
+        f"Total bins: {TOTAL_BINS}  |  Weight/bin: {WEIGHT_PER_BIN_KG} kg<br>"
+        f"Total capacity: {TOTAL_BIN_CAPACITY_KG:,} kg<br>"
+        f"Bins in use (prior cycle): {BINS_IN_USE}<br>"
+        f"Available this week: {AVAILABLE_BINS}  ({AVAILABLE_BIN_CAPACITY_KG:,} kg)<br>"
+        f"Filled this week: {total_bins_used}<br>"
+        f"Status: {bmsg_f}"
     )
     folium.Marker(
-        location=fac_coord,
-        popup=folium.Popup(fac_popup, max_width=290),
+        location=fac_c,
+        popup=folium.Popup(fac_popup, max_width=310),
         tooltip="BSF Facility — Woolwich Township",
         icon=folium.Icon(color="black", icon="leaf", prefix="fa"),
     ).add_to(m)
 
-    # ── Store markers  (radius ∝ weekly waste) ───────────────────────
+    # ── Store markers ─────────────────────────────────────────────────
     for store, data in STORES.items():
-        info   = profile[store]
-        radius = max(8, info["weekly_kg"] / 120)
-        partial_note = (
-            f"<br><b>⚠ PARTIAL: {info['deferred_kg']:,.0f} kg deferred</b>"
-            if info.get("partial") else ""
+        info      = profile[store]
+        radius    = max(6, info["weekly_kg"] / 60)
+        trip_lbl  = next(
+            (f"Trip {tid+1} — {t['day']}" for tid,t in schedule.items()
+             if store in t["stores"] and not t.get("skipped")),
+            "DEFERRED"
         )
         popup_html = (
             f"<b>{store}</b><br>{data['address']}<br>"
             f"Size: {data['size_sqft']:,} sqft<br>"
-            f"Weekly waste: {info['weekly_kg']:,} kg<br>"
-            f"Truck loads/visit: {info['loads_per_visit']}<br>"
-            f"Collection day: {info.get('collection_day', '—')}"
-            f"{partial_note}"
+            f"Weekly waste: {info['weekly_kg']:,.1f} kg<br>"
+            f"(proportional to Guelph 1,000 kg/week reference)<br>"
+            f"Loads/visit: {info['loads_per_visit']}<br>"
+            f"Bins allocated: {info['bins_allocated']}<br>"
+            f"Collection: {trip_lbl}"
         )
         folium.CircleMarker(
             location=data["coords"],
             radius=radius,
-            popup=folium.Popup(popup_html, max_width=250),
-            tooltip=f"{store} — {info['weekly_kg']:,} kg/wk",
-            color=data["color"],
-            fill=True,
-            fillOpacity=0.75,
+            popup=folium.Popup(popup_html, max_width=270),
+            tooltip=f"{store} — {info['weekly_kg']:,.1f} kg/wk",
+            color=data["color"], fill=True, fillOpacity=0.75,
         ).add_to(m)
 
-    # ── Route polylines  (thicker line = more truck loads) ───────────
-    active = [r for r in routes if r["route_order"]]
-    for i, route in enumerate(active):
-        s       = route["stores"][0]
-        n_loads = profile[s]["loads_per_visit"]
-        coords  = [fac_coord, STORES[route["route_order"][0]]["coords"], fac_coord]
-        label   = (f"{route['day']}: "
-                   f"{' → '.join(route['route_order'])}  "
-                   f"({n_loads} loads, {route['distance_km']:.1f} km)")
+    # ── Route polylines ───────────────────────────────────────────────
+    active = [t for t in schedule.values() if not t.get("skipped")]
+    for i, trip in enumerate(active):
+        s0_, s1_ = trip["stores"]
+        coords = [fac_c, STORES[s0_]["coords"], STORES[s1_]["coords"], fac_c]
+        label  = (f"Trip {i+1} — {trip['day']}: "
+                  f"{trip['order']}  |  "
+                  f"{trip['distance_km']} km  |  "
+                  f"{trip['total_min']:.0f} min  |  "
+                  f"{trip['truck_util_pct']}% truck util  |  "
+                  f"{trip['bins_needed']} bins")
         folium.PolyLine(
             locations=coords,
             color=ROUTE_COLORS[i % len(ROUTE_COLORS)],
-            weight=3 + n_loads * 0.5,
-            opacity=0.85,
-            tooltip=label,
-            dash_array="8 4",
+            weight=4, opacity=0.85, tooltip=label, dash_array="6 4",
         ).add_to(m)
 
-    # ── Legend with capacity bar ─────────────────────────────────────
-    fill_pct  = min(100, ratio_end * 100)
-    bar_color = ("#e74c3c" if fill_pct >= 90 else
-                 "#f39c12" if fill_pct >= 75 else
-                 "#f1c40f" if fill_pct >= 50 else "#2ecc71")
+    # ── Legend + bin gauge ────────────────────────────────────────────
+    fill_pct  = min(100, bratio_f * 100)
+    bar_color = ("#e74c3c" if fill_pct>=90 else "#f39c12" if fill_pct>=75
+                 else "#f1c40f" if fill_pct>=50 else "#2ecc71")
     legend_html = f"""
     <div style="position:fixed;bottom:30px;left:30px;z-index:9999;
                 background:white;padding:14px;border:2px solid #aaa;
-                border-radius:8px;font-size:13px;line-height:1.9;min-width:210px;">
-        <b>🗓 Route Legend</b><br>
+                border-radius:8px;font-size:13px;line-height:2;min-width:230px;">
+        <b>🗓 Trip Legend</b><br>
         {"".join(
-            f'<span style="color:{ROUTE_COLORS[i%len(ROUTE_COLORS)]}">━━</span> {r["day"]}<br>'
-            for i, r in enumerate(active)
+            f'<span style="color:{ROUTE_COLORS[i%len(ROUTE_COLORS)]}">━━</span> Trip {i+1} — {t["day"]}<br>'
+            for i,t in enumerate(active)
         )}
         <hr style="margin:6px 0;">
-        <b>🌿 BSF Facility Fill</b><br>
-        <div style="background:#eee;border-radius:4px;height:14px;width:170px;">
+        <b>🌿 Larvae Bin Usage</b><br>
+        <small>{total_bins_used} / {AVAILABLE_BINS} bins  ({fill_pct:.0f}%)</small><br>
+        <div style="background:#eee;border-radius:4px;height:14px;width:180px;">
           <div style="background:{bar_color};width:{fill_pct:.0f}%;height:14px;
                       border-radius:4px;"></div>
         </div>
-        <small>{fill_pct:.1f}% of {FACILITY_CAPACITY_KG:,} kg</small>
+        <small>Total facility bins: {TOTAL_BINS}  |  In larval cycle: {BINS_IN_USE}</small>
     </div>"""
     m.get_root().html.add_child(folium.Element(legend_html))
     m.save("waste_collection_routes.html")
@@ -668,8 +670,8 @@ def generate_map(profile, routes, final_fill):
 # ============================================================
 
 if __name__ == "__main__":
-    profile              = compute_waste_profile()
-    schedule, flags, fF  = build_schedule(profile)
-    routes               = build_daily_routes(schedule, profile)
-    print_report(profile, routes, flags, fF)
-    generate_map(profile, routes, fF)
+    profile                         = compute_waste_profile()
+    pairing                         = find_optimal_pairing()
+    schedule, flags, total_bins_used = build_schedule(pairing, profile)
+    print_report(profile, schedule, flags, total_bins_used, pairing)
+    generate_map(profile, schedule, total_bins_used)
