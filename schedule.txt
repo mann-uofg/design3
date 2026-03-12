@@ -1,29 +1,57 @@
 
+  Building OSRM distance matrix …
+    Facility     ↔ Waterloo     :   13.0 km  (15 min)  ⚠ Δ-5.0 km vs manual 18 km
+    Facility     ↔ Kitchener    :   10.5 km  (14 min)  ⚠ Δ-11.5 km vs manual 22 km
+    Facility     ↔ Guelph       :   18.9 km  (21 min)  ✅
+    Facility     ↔ Cambridge    :   16.8 km  (22 min)  ✅
+    Waterloo     ↔ Kitchener    :   13.7 km  (14 min)  ✅
+    Waterloo     ↔ Guelph       :   30.9 km  (35 min)  ⚠ Δ+3.9 km vs manual 27 km
+    Waterloo     ↔ Cambridge    :   25.0 km  (25 min)  ⚠ Δ-5.0 km vs manual 30 km
+    Kitchener    ↔ Guelph       :   23.5 km  (29 min)  ⚠ Δ-4.5 km vs manual 28 km
+    Kitchener    ↔ Cambridge    :   13.3 km  (15 min)  ⚠ Δ-7.7 km vs manual 21 km
+    Guelph       ↔ Cambridge    :   19.8 km  (26 min)  ⚠ Δ-4.2 km vs manual 24 km
+  ✅ ROAD_DIST_KM updated from OSRM
+
 ========================================================================
   FARM BOY × BSF WASTE COLLECTION SYSTEM
 ========================================================================
 
-  BSF FACILITY — LARVAE BIN INVENTORY
+  BSF FACILITY — BIN CAPACITY & UTILISATION
   -------------------------------------------------------------------
-  Name      : BSF Processing Facility — Woolwich Township (Breslau area)
+  Facility  : BSF Processing Facility — Woolwich Township (Breslau area)
   Address   : Woolwich Township, ON  (rural / agricultural zone)
-  ─── Bin Specs ─────────────────────────────────────────────────
-  Total bins             : 50
-  Weight per bin         : 100 kg  (200 L commercial BSFL container)
-  Total bin capacity     : 5,000 kg  (50 × 100 kg)
-  ─── Weekly State ──────────────────────────────────────────────
-  Bins in use (prior larval cycle) : 5  ← larvae still processing (~12-day cycle)
-  Available bins this week         : 45  (4,500 kg capacity)
-  Bins filled this week            : 40
-  Bins remaining after collections : 5
-  Bin utilisation                  : 40/45  (88.9%)
-  Status                           : 🟠 CAUTION (88.9%) — 5 bins left.
+
+  ── Bin Infrastructure ───────────────────────────────────────────
+  Facility bin capacity   :   100  bins  (physical slots built into facility)
+  Facility kg capacity    : 10,000  kg    (if all 100 slots filled with bins)
+  Bins owned / on-site    :    50  bins  = 5,000 kg  (50% of facility capacity)  [50 slots unprocured]
+  Weight per bin          :   100  kg    (200 L commercial BSFL container)
+
+  ── Weekly Bin State (start of week) ─────────────────────────────
+  Bins in active cycle    :    10  bins  = 1,000 kg pre-committed  (~12-day BSFL processing, not available)
+  Bins available          :    40  bins  = 4,000 kg intake capacity this week
+
+  ── Utilisation After This Week's Collections ────────────────────
+  Bins filled this week   :    40  bins  (of 40 available)
+  Total bins in use after :    50  bins  = 5,000 kg  (in-cycle + newly filled)
+  Bins free after week    :     0  bins
+
+  Facility slot util      :   50 / 100  =  50.0%  (total bins in use / facility capacity)
+  Owned-bin util          :   50 / 50   = 100.0%  (total bins in use / bins owned)  🚫 FULL
+  Available-bin consumed  :   40 / 40   = 100.0%  (filled this week / available this week)
+
+  Owned kg utilisation    :  5,000 / 5,000 kg  = 100.0%  🚫 FULL
+
+  ⚠  ALERTS & FLAGS  (1 total)
+  -------------------------------------------------------------------
+  🟡 [WARNING]  BIN_LEVEL_FULL
+       After Trip 2: owned-bin util 100.0% (50/50 bins  |  4,830/5,000 kg).
 
 
   WASTE PROFILE  (Guelph reference — store-manager confirmed)
   -------------------------------------------------------------------
   Reference : Guelph  25,276 sqft  →  1,000 kg/week
-  Rate      : 0.039563 kg/sqft/week  (uniform across cluster — same Farm Boy format)
+  Rate      : 0.039563 kg/sqft/week  (uniform across cluster)
   Formula   : weekly_kg = (store_sqft / 25,276) × 1,000
 
   Store           sqft  size ratio   kg/week  Loads  Bins  Assigned trip
@@ -34,14 +62,14 @@
   Kitchener     22,000      0.8704     870.4      1     9  Trip 1 (Monday)
 
   Total weekly waste : 3,829.7 kg
-  Truck capacity     : 3,000 kg  (all stores fit in 1 load each at current volumes)
+  Truck capacity     : 3,000 kg  (all stores = 1 load/visit)
 
 
   PAIRING OPTIMIZER — all 3 unique combinations evaluated
   -------------------------------------------------------------------
-  (Waterloo + Guelph) & (Cambridge + Kitchener)     126.0 km
-  (Waterloo + Cambridge) & (Guelph + Kitchener)     136.0 km
-  (Waterloo + Kitchener) & (Guelph + Cambridge)     116.0 km  ← SELECTED (minimum distance)
+  (Waterloo+Guelph) & (Cambridge+Kitchener)         103.4 km
+  (Waterloo+Cambridge) & (Guelph+Kitchener)         107.7 km
+  (Waterloo+Kitchener) & (Guelph+Cambridge)          92.7 km  ← SELECTED (minimum distance)
 
 
 ========================================================================
@@ -50,33 +78,36 @@
 
   TRIP 1 — MONDAY
   ──────────────────────────────────────────────────────────────────
-  Route      : Facility → Waterloo → Kitchener → Facility
-  Legs       : Facility → Waterloo: 18 km  |  Waterloo → Kitchener: 14 km  |  Kitchener → Facility: 22 km
-  Distance   : 54 km  (real road, semi-truck route)
-  Time       : 59 min drive  +  60 min loading  =  119 min (2.0 hrs)
-  Waste      : 1,927.7 kg  |  Truck utilization: 64.3%
-  Bins used  : 20  |  Bins remaining after trip: 25
+  Route          : Facility → Waterloo → Kitchener → Facility
+  Legs           : Facility→Waterloo: 13.0 km  |  Waterloo→Kitchener: 13.7 km  |  Kitchener→Facility: 10.5 km
+  Distance       : 37.2 km  (real road, semi-truck)
+  Time           : 41 min drive + 60 min loading = 101 min (1.7 hrs)
+  Waste          : 1,927.7 kg  |  Truck util: 64.3%
+  Bins used      : 20  |  Bins left (available pool): 20
+  Owned kg fill  : 2,927.7 / 5,000 kg  (58.6%)
     └─ Waterloo     :  1057.3 kg  (11 bin(s))
     └─ Kitchener    :   870.4 kg  (9 bin(s))
 
   TRIP 2 — THURSDAY
   ──────────────────────────────────────────────────────────────────
-  Route      : Facility → Guelph → Cambridge → Facility
-  Legs       : Facility → Guelph: 20 km  |  Guelph → Cambridge: 24 km  |  Cambridge → Facility: 18 km
-  Distance   : 62 km  (real road, semi-truck route)
-  Time       : 68 min drive  +  60 min loading  =  128 min (2.1 hrs)
-  Waste      : 1,902.0 kg  |  Truck utilization: 63.4%
-  Bins used  : 20  |  Bins remaining after trip: 5
+  Route          : Facility → Guelph → Cambridge → Facility
+  Legs           : Facility→Guelph: 18.9 km  |  Guelph→Cambridge: 19.8 km  |  Cambridge→Facility: 16.8 km
+  Distance       : 55.5 km  (real road, semi-truck)
+  Time           : 60 min drive + 60 min loading = 120 min (2.0 hrs)
+  Waste          : 1,902.0 kg  |  Truck util: 63.4%
+  Bins used      : 20  |  Bins left (available pool): 0
+  Owned kg fill  : 4,829.7 / 5,000 kg  (96.6%)
     └─ Guelph       :  1000.0 kg  (10 bin(s))
     └─ Cambridge    :   902.0 kg  (10 bin(s))
 
 ========================================================================
   WEEKLY TOTALS
-  Distance         : 116.0 km  (2 trips)
-  Operational time : 246 min  (4.1 hrs combined)
-  Waste collected  : 3,829.7 kg
-  Bin utilisation  : 40 / 45  (88.9%)  🟠 CAUTION (88.9%) — 5 bins left.
-  Bin summary      : 50 total  |  5 in active larval cycle  |  5 free after week
+  Distance          : 92.7 km  (2 trips)
+  Operational time  : 221 min  (3.7 hrs combined)
+  Waste collected   : 3,829.7 kg
+  Facility slot util:   50/100  = 50.0%
+  Owned-bin util    :   50/50  = 100.0%  🚫 FULL
+  Available consumed:   40/40  = 100.0%
+  Owned kg fill     :  5,000/5,000 kg  = 100.0%  🚫
 ========================================================================
-
   Interactive map saved → waste_collection_routes.html
