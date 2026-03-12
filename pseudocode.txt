@@ -1,0 +1,530 @@
+
+================================================================================
+  PSEUDOCODE — Farm Boy × BSF Waste Collection Routing Algorithm  (v4)
+================================================================================
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 1 — CONSTANTS & PARAMETERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  // Truck
+  TRUCK_CAPACITY_KG   ← 3000         // max organic waste per load (kg)
+  TRUCK_SPEED_KPH     ← 55           // average road speed (km/h)
+  LOADING_TIME_MIN    ← 30           // load + unload time per store stop (min)
+  TRIPS_PER_WEEK      ← 2            // collection runs per week
+  DAYS_PER_WEEK       ← 5            // Mon–Fri operational window
+  WORKING_HOURS_MIN   ← 480          // 8-hr daily cap (min)
+
+  // BSF Bin Hierarchy (single source of truth for all capacity)
+  FACILITY_BIN_CAPACITY ← 100        // physical bin slots in facility infrastructure
+  BINS_OWNED            ← 50         // bins currently on-site / procured
+  BINS_IN_USE           ← 10         // bins locked in active ~12-day BSFL cycle
+  WEIGHT_PER_BIN_KG     ← 100        // max waste per 200L BSFL container (kg)
+
+  // Derived capacity (computed once at startup — never hardcoded separately)
+  BINS_AVAILABLE            ← BINS_OWNED - BINS_IN_USE                         // 40
+  BIN_SLOTS_EMPTY           ← FACILITY_BIN_CAPACITY - BINS_OWNED               // 50
+  FACILITY_BIN_CAPACITY_KG  ← FACILITY_BIN_CAPACITY × WEIGHT_PER_BIN_KG       // 10,000 kg
+  OWNED_BIN_CAPACITY_KG     ← BINS_OWNED × WEIGHT_PER_BIN_KG                  // 5,000 kg
+  AVAILABLE_BIN_CAPACITY_KG ← BINS_AVAILABLE × WEIGHT_PER_BIN_KG              // 4,000 kg
+  FACILITY_CURRENT_FILL_KG  ← BINS_IN_USE × WEIGHT_PER_BIN_KG                 // 1,000 kg
+
+  // Alert thresholds (fraction of OWNED_BIN_CAPACITY_KG)
+  BINS_WARN     ← 0.50
+  BINS_CAUTION  ← 0.75
+  BINS_CRITICAL ← 0.90
+
+  // Waste reference (empirical, store-manager confirmed)
+  REFERENCE_STORE     ← "Guelph"
+  REFERENCE_WEEKLY_KG ← 1000         // kg/week
+
+  // OSRM routing
+  OSRM_BASE_URL      ← "http://router.project-osrm.org/route/v1/driving"
+  OSRM_TIMEOUT_SEC   ← 10
+  USE_OSRM_DISTANCES ← TRUE
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 2 — DATA STRUCTURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  FACILITY ← {
+      name    : "BSF Processing Facility — Woolwich Township",
+      coords  : [43.490, -80.420],        // (lat, lon)
+      address : "Woolwich Township, ON"
+  }
+
+  STORES ← {
+      "Waterloo"  : { coords, address, size_sqft: 26725 },
+      "Guelph"    : { coords, address, size_sqft: 25276 },
+      "Cambridge" : { coords, address, size_sqft: 22800 },
+      "Kitchener" : { coords, address, size_sqft: 22000 }
+  }
+
+  ROAD_DIST_KM ← symmetric distance matrix (km, real road values):
+      Facility ↔ Waterloo  : 18      Waterloo  ↔ Kitchener : 14
+      Facility ↔ Kitchener : 22      Waterloo  ↔ Guelph    : 27
+      Facility ↔ Guelph    : 20      Waterloo  ↔ Cambridge : 30
+      Facility ↔ Cambridge : 18      Kitchener ↔ Guelph    : 28
+      Guelph   ↔ Cambridge : 24      Kitchener ↔ Cambridge : 21
+
+  // Lookup helpers
+  FUNCTION road_km(A, B):
+      IF A == B: RETURN 0
+      RETURN ROAD_DIST_KM[A,B] or ROAD_DIST_KM[B,A]
+
+  FUNCTION drive_min(A, B):
+      RETURN (road_km(A, B) / TRUCK_SPEED_KPH) × 60
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 3 — OSRM ROUTING UTILITIES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  FUNCTION fetch_osrm_route(waypoints):
+  ─────────────────────────────────────────────────────────────────────────────
+      // waypoints: ordered list of (lat, lon) tuples
+      // Returns  : (geometry, distance_km, duration_min)
+      //            geometry = list of [lat, lon] pairs for map rendering
+  ─────────────────────────────────────────────────────────────────────────────
+      coords_str ← JOIN each (lat,lon) as "lon,lat" with ";"   // OSRM uses lon,lat order
+      url        ← OSRM_BASE_URL + "/" + coords_str
+                   + "?overview=full&geometries=geojson"
+      TRY:
+          response ← HTTP GET(url, timeout=OSRM_TIMEOUT_SEC)
+          data     ← PARSE JSON(response)
+          IF data["code"] ≠ "Ok": RAISE error
+          route    ← data["routes"][0]
+          geometry ← [[coord[1], coord[0]]                     // swap lon,lat → lat,lon
+                       FOR coord IN route["geometry"]["coordinates"]]
+          RETURN (geometry,
+                  ROUND(route["distance"] / 1000, 1),          // metres → km
+                  ROUND(route["duration"] / 60,   1))          // seconds → minutes
+      CATCH any exception:
+          PRINT warning message
+          RETURN (straight_line_geometry, NULL, NULL)          // graceful fallback
+
+
+  FUNCTION build_osrm_distance_matrix():
+  ─────────────────────────────────────────────────────────────────────────────
+      // Validates every pairwise leg in ROAD_DIST_KM against OSRM.
+      // Returns updated dict; falls back to hardcoded value on failure.
+  ─────────────────────────────────────────────────────────────────────────────
+      nodes ← {"Facility": FACILITY.coords} ∪ {s: STORES[s].coords FOR s IN STORES}
+      updated ← {}
+      FOR each (A, B) IN ROAD_DIST_KM:
+          (_, dist_km, dur_min) ← fetch_osrm_route([nodes[A], nodes[B]])
+          IF dist_km ≠ NULL:
+              updated[(A,B)] ← dist_km
+              delta ← dist_km - ROAD_DIST_KM[(A,B)]
+              PRINT comparison with ✅ if |delta| ≤ 2 km, else ⚠ flag
+          ELSE:
+              updated[(A,B)] ← ROAD_DIST_KM[(A,B)]            // fallback
+          SLEEP 0.15 sec                                       // polite rate-limit
+      RETURN updated
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 4 — WASTE PROFILE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  FUNCTION compute_waste_profile():
+  ─────────────────────────────────────────────────────────────────────────────
+      // Scales waste linearly from the Guelph empirical reference.
+      // Formula: weekly_kg = (store_sqft / guelph_sqft) × 1000
+  ─────────────────────────────────────────────────────────────────────────────
+      ref_sqft ← STORES[REFERENCE_STORE].size_sqft           // 25,276 sqft
+      kps      ← REFERENCE_WEEKLY_KG / ref_sqft              // kg per sqft per week
+
+      FOR each store IN STORES:
+          weekly_kg       ← STORES[store].size_sqft × kps
+          loads_per_visit ← CEILING(weekly_kg / TRUCK_CAPACITY_KG)
+          waste_per_load  ← weekly_kg / loads_per_visit
+
+          profile[store] ← {
+              weekly_kg       : ROUND(weekly_kg, 1),
+              loads_per_visit : loads_per_visit,
+              waste_per_load  : ROUND(waste_per_load, 1),
+              collected_kg    : ROUND(weekly_kg, 1),          // updated by scheduler
+              deferred_kg     : 0.0,                          // updated if partial
+              status_flag     : "OK",                         // updated by scheduler
+              bins_allocated  : 0                             // updated by scheduler
+          }
+
+      RETURN profile
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 5 — BIN UTILISATION STATUS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  FUNCTION bin_utilisation(bins_filled_this_week):
+  ─────────────────────────────────────────────────────────────────────────────
+      // Single source of truth for all capacity reporting.
+      // Three ratios — all relative to the bin hierarchy:
+      //
+      //   Facility slot util = total_in_use / FACILITY_BIN_CAPACITY
+      //   Owned-bin util     = total_in_use / BINS_OWNED
+      //   Available consumed = bins_filled_this_week / BINS_AVAILABLE
+      //
+      // Alert level driven by owned_bin_util (most operationally actionable).
+  ─────────────────────────────────────────────────────────────────────────────
+      total_in_use   ← BINS_IN_USE + bins_filled_this_week
+
+      facility_slot_util ← total_in_use / FACILITY_BIN_CAPACITY
+      owned_bin_util     ← total_in_use / BINS_OWNED             // guard ÷0 if BINS_OWNED=0
+      avail_consumed     ← bins_filled_this_week / BINS_AVAILABLE // guard ÷0 if BINS_AVAILABLE=0
+      fill_kg            ← total_in_use × WEIGHT_PER_BIN_KG
+
+      // Determine alert level from owned_bin_util
+      IF   owned_bin_util ≥ 1.0         : level ← "FULL",     icon ← "🚫"
+      ELIF owned_bin_util ≥ BINS_CRITICAL: level ← "CRITICAL", icon ← "🔴"
+      ELIF owned_bin_util ≥ BINS_CAUTION : level ← "CAUTION",  icon ← "🟠"
+      ELIF owned_bin_util ≥ BINS_WARN    : level ← "WARNING",  icon ← "🟡"
+      ELSE                               : level ← "NORMAL",   icon ← "🟢"
+
+      RETURN {
+          level, icon,
+          facility_slot_util, owned_bin_util, avail_consumed,
+          total_in_use, fill_kg,
+          bins_free_after   : BINS_OWNED - total_in_use,
+          slots_unprocured  : BIN_SLOTS_EMPTY
+      }
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 6 — TRIP PAIRING OPTIMIZER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  FUNCTION find_optimal_pairing():
+  ─────────────────────────────────────────────────────────────────────────────
+      // Enumerate all C(4,2)/2 = 3 unique ways to split 4 stores into 2 pairs.
+      // For each candidate pairing, evaluate both visit orderings per trip.
+      // If USE_OSRM_DISTANCES: use full-trip OSRM distance (more accurate).
+      // Else: sum pairwise legs from ROAD_DIST_KM.
+      // Select the pairing with the minimum total weekly distance.
+      // Cache route geometry in the trip dict for map rendering (no re-fetching).
+  ─────────────────────────────────────────────────────────────────────────────
+      stores ← list(STORES.keys())                             // [W, G, C, K]
+
+      // Generate 3 unique pairings by fixing stores[0] and varying its partner
+      unique_pairings ← [
+          ([stores[0], stores[i]],                             // pair 1
+           [s FOR s IN stores IF s ∉ {stores[0], stores[i]}]) // pair 2
+          FOR i IN {1, 2, 3}
+      ]
+
+      best_total  ← ∞
+      best_result ← NULL
+      comparison  ← []
+
+      FOR each (pair1, pair2) IN unique_pairings:
+          trips ← []; week_total ← 0
+
+          FOR each pair [A, B] IN [pair1, pair2]:
+
+              IF USE_OSRM_DISTANCES:
+                  // Full-trip OSRM: respects real road one-ways & turn restrictions
+                  wp_fwd ← [Facility, A, B, Facility]          // (lat,lon) tuples
+                  wp_rev ← [Facility, B, A, Facility]
+                  (geo_fwd, dist_fwd, _) ← fetch_osrm_route(wp_fwd)
+                  (geo_rev, dist_rev, _) ← fetch_osrm_route(wp_rev)
+                  SLEEP 0.10 sec                               // polite rate-limit
+                  IF dist_fwd = NULL: dist_fwd ← road_km(F,A)+road_km(A,B)+road_km(B,F)
+                  IF dist_rev = NULL: dist_rev ← road_km(F,B)+road_km(B,A)+road_km(A,F)
+              ELSE:
+                  // Manual fallback: sum pairwise legs from ROAD_DIST_KM
+                  dist_fwd ← road_km(F,A) + road_km(A,B) + road_km(B,F)
+                  dist_rev ← road_km(F,B) + road_km(B,A) + road_km(A,F)
+                  geo_fwd  ← [F, A, B, F]                     // straight-line fallback
+                  geo_rev  ← [F, B, A, F]
+
+              // Choose the shorter ordering
+              IF dist_fwd ≤ dist_rev:
+                  trips.APPEND({
+                      stores      : [A, B],
+                      distance_km : ROUND(dist_fwd, 1),
+                      order       : "Facility → A → B → Facility",
+                      geometry    : geo_fwd,                   // cached for map
+                      source      : "OSRM" or "manual"
+                  })
+                  week_total ← week_total + dist_fwd
+              ELSE:
+                  trips.APPEND({ stores:[B,A], distance_km:dist_rev, ..., geometry:geo_rev })
+                  week_total ← week_total + dist_rev
+
+          week_total ← ROUND(week_total, 1)
+          comparison.APPEND({ pairing: label, total_km: week_total })
+
+          IF week_total < best_total:
+              best_total  ← week_total
+              best_result ← { trips, total_km: week_total }
+
+      // Mark the winning pairing
+      FOR each row IN comparison:
+          row.chosen ← (row.total_km == best_result.total_km)
+
+      best_result.comparison ← comparison
+      RETURN best_result
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 7 — WEEKLY SCHEDULER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  FUNCTION build_schedule(pairing, profile):
+  ─────────────────────────────────────────────────────────────────────────────
+      // Assigns a collection day to each trip and applies three sequential
+      // capacity gates to determine how much waste is actually collected.
+      //
+      // Day assignment:
+      //   step      = CEILING(DAYS_PER_WEEK / TRIPS_PER_WEEK) = 3
+      //   trip_days = [min(i×step, DAYS_PER_WEEK-1) FOR i IN 0..TRIPS_PER_WEEK-1]
+      //             = [0, 3] → Monday, Thursday  (3-day gap enforced)
+      //
+      // Capacity ceiling (bin-derived, no separate kg variable):
+      //   AVAILABLE_BIN_CAPACITY_KG = BINS_AVAILABLE × WEIGHT_PER_BIN_KG
+      //   facility_fill starts at FACILITY_CURRENT_FILL_KG (= BINS_IN_USE × WEIGHT_PER_BIN_KG)
+      //
+      // Three sequential gates per trip:
+      //   Gate 1 — HARD STOP  : No bins left in the available pool → DEFER trip
+      //   Gate 2 — PARTIAL    : Bins left but not enough for full trip → collect what fits
+      //   Gate 3 — ADVISORY   : Total trip time exceeds WORKING_HOURS_MIN → flag only
+  ─────────────────────────────────────────────────────────────────────────────
+      step          ← CEILING(DAYS_PER_WEEK / TRIPS_PER_WEEK)   // = 3
+      trip_days     ← [MIN(i×step, DAYS_PER_WEEK-1) FOR i IN 0..TRIPS_PER_WEEK-1]
+      schedule      ← {}
+      flags         ← []
+      bins_filled   ← 0
+      facility_fill ← FACILITY_CURRENT_FILL_KG                  // pre-committed kg
+
+      FOR i, trip IN ENUMERATE(pairing.trips):
+          day         ← trip_days[i]
+          stores      ← trip.stores                              // [A, B]
+          waste       ← SUM(profile[s].weekly_kg FOR s IN stores)
+          bins_needed ← CEILING(waste / WEIGHT_PER_BIN_KG)
+          bins_left   ← BINS_AVAILABLE - bins_filled             // remaining in pool
+
+          // ── GATE 1: Hard stop — no bins available ──────────────────
+          IF bins_left ≤ 0:
+              FOR each s IN stores:
+                  profile[s].status_flag  ← "DEFERRED — NO BINS"
+                  profile[s].collected_kg ← 0
+                  profile[s].deferred_kg  ← profile[s].weekly_kg
+              flags.APPEND({ severity:"CRITICAL", type:"NO_BINS_AVAILABLE", detail:... })
+              schedule[i] ← { ...trip, day, skipped:TRUE, waste_kg:0, bins_needed:0,
+                               bins_left_after:0, fac_fill_after:facility_fill }
+              CONTINUE to next trip
+
+          // ── GATE 2: Partial collection ──────────────────────────────
+          bin_cap_left ← bins_left × WEIGHT_PER_BIN_KG          // kg collectible
+          IF bin_cap_left < waste:
+              // Binding constraint: not enough bins for full trip
+              flags.APPEND({ severity:"WARNING", type:"PARTIAL_COLLECTION", detail:... })
+
+              // Distribute collectible kg proportionally by store floor area
+              total_sqft ← SUM(STORES[s].size_sqft FOR s IN stores)
+              FOR each s IN stores:
+                  fraction               ← STORES[s].size_sqft / total_sqft
+                  profile[s].collected_kg ← ROUND(bin_cap_left × fraction, 1)
+                  profile[s].deferred_kg  ← profile[s].weekly_kg - profile[s].collected_kg
+                  profile[s].status_flag  ← "PARTIAL COLLECTION"
+
+              waste       ← bin_cap_left                         // update to what we can collect
+              bins_needed ← bins_left                            // use all remaining bins
+
+          // ── Allocate bins per store (ceiling division) ──────────────
+          FOR each s IN stores:
+              profile[s].bins_allocated ← CEILING(profile[s].collected_kg / WEIGHT_PER_BIN_KG)
+
+          bins_filled   ← bins_filled + bins_needed
+          facility_fill ← facility_fill + waste
+
+          // ── Post-trip utilisation alert ─────────────────────────────
+          bu ← bin_utilisation(bins_filled)
+          IF bu.level IN {"CRITICAL", "FULL"}:
+              flags.APPEND({ severity:"WARNING", type:"BIN_LEVEL_" + bu.level, detail:... })
+
+          // ── GATE 3: Advisory — overtime risk ────────────────────────
+          A, B      ← stores[0], stores[1]
+          drive     ← drive_min(Facility,A) + drive_min(A,B) + drive_min(B,Facility)
+          load      ← LOADING_TIME_MIN × 2                      // 2 stops per trip
+          trip_time ← drive + load
+          IF trip_time > WORKING_HOURS_MIN:
+              flags.APPEND({ severity:"INFO", type:"OVERTIME_RISK", detail:... })
+
+          // ── Record trip result ──────────────────────────────────────
+          schedule[i] ← {
+              ...trip,                                           // stores, order, geometry
+              day            : DAY_NAMES[day],
+              skipped        : FALSE,
+              drive_min      : ROUND(drive, 1),
+              load_min       : load,
+              total_min      : ROUND(trip_time, 1),
+              waste_kg       : ROUND(waste, 1),
+              truck_util_pct : ROUND(waste / TRUCK_CAPACITY_KG × 100, 1),
+              bins_needed    : bins_needed,
+              bins_left_after: BINS_AVAILABLE - bins_filled,
+              fac_fill_after : ROUND(facility_fill, 1),
+              overtime       : trip_time > WORKING_HOURS_MIN
+          }
+
+      RETURN (schedule, flags, bins_filled, facility_fill)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 8 — CONSOLE REPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  FUNCTION print_report(profile, schedule, flags, bins_filled, final_fill, pairing):
+  ─────────────────────────────────────────────────────────────────────────────
+      bu ← bin_utilisation(bins_filled)
+
+      PRINT facility name and address
+
+      // Bin infrastructure block
+      PRINT FACILITY_BIN_CAPACITY, FACILITY_BIN_CAPACITY_KG
+      PRINT BINS_OWNED, OWNED_BIN_CAPACITY_KG, (BINS_OWNED/FACILITY_BIN_CAPACITY)%
+      PRINT WEIGHT_PER_BIN_KG, BIN_SLOTS_EMPTY
+
+      // Weekly bin state (start of week)
+      PRINT BINS_IN_USE, FACILITY_CURRENT_FILL_KG  ("pre-committed")
+      PRINT BINS_AVAILABLE, AVAILABLE_BIN_CAPACITY_KG
+
+      // Post-collection utilisation (3 ratios)
+      PRINT bins_filled, bu.total_in_use, bu.fill_kg, bu.bins_free_after
+      PRINT "Facility slot util : total_in_use / FACILITY_BIN_CAPACITY"
+      PRINT "Owned-bin util     : total_in_use / BINS_OWNED  + alert icon"
+      PRINT "Available consumed : bins_filled / BINS_AVAILABLE"
+      PRINT "Owned kg util      : fill_kg / OWNED_BIN_CAPACITY_KG"
+
+      // Alerts
+      FOR each flag IN flags:
+          PRINT [severity] type: detail
+
+      // Waste profile table
+      PRINT reference store, sqft, kps rate
+      FOR each store IN profile:
+          PRINT store, sqft, size_ratio, weekly_kg, loads, bins_allocated, assigned_trip
+
+      // Pairing comparison
+      PRINT source label (OSRM or manual)
+      FOR each row IN pairing.comparison:
+          PRINT pairing label, total_km, "← SELECTED" if chosen
+
+      // Per-trip schedule
+      FOR each trip IN schedule:
+          IF skipped: PRINT "SKIPPED — no bins available"; CONTINUE
+          PRINT day, route order, individual leg distances
+          PRINT distance_km, drive_min, load_min, total_min
+          PRINT waste_kg, truck_util_pct
+          PRINT bins_needed, bins_left_after
+          PRINT fac_fill_after / OWNED_BIN_CAPACITY_KG as %
+          FOR each store IN trip.stores:
+              PRINT store, collected_kg, bins_allocated
+
+      // Weekly totals
+      PRINT total_km, total_min
+      PRINT total_collected_kg, total_deferred_kg (if any)
+      PRINT all 3 utilisation ratios + alert icon
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 9 — INTERACTIVE MAP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  FUNCTION generate_map(profile, schedule, bins_filled, final_fill):
+  ─────────────────────────────────────────────────────────────────────────────
+      // Geometry is pre-cached in each trip dict from find_optimal_pairing().
+      // No additional OSRM calls are made here.
+  ─────────────────────────────────────────────────────────────────────────────
+      bu ← bin_utilisation(bins_filled)
+      m  ← folium.Map centred on [43.46, -80.39], zoom=11
+
+      // BSF Facility marker (leaf icon)
+      ADD marker at FACILITY.coords with popup showing:
+          bin infrastructure summary, weekly bin state, all 3 utilisation ratios
+
+      // Store markers (colour-coded circles, radius ∝ weekly_kg)
+      FOR each store IN STORES:
+          ADD circle at store.coords with popup showing:
+              address, sqft, weekly_kg, loads, bins_allocated, assigned trip
+
+      // Route polylines — OSRM real road geometry
+      FOR each active trip IN schedule:
+          geometry  ← trip.geometry                             // pre-cached, no OSRM call
+          src_label ← trip.source ("OSRM" or "manual fallback")
+          ADD PolyLine(geometry, colour by trip index,
+                       tooltip: order, distance, time, bins, source)
+          ADD direction arrow marker (➤) at midpoint of geometry
+
+      // Legend panel (fixed, bottom-left)
+      RENDER 3 colour-coded gauge bars:
+          Bar 1 — Owned-bin util     : total_in_use / BINS_OWNED
+          Bar 2 — Facility slot util : total_in_use / FACILITY_BIN_CAPACITY
+          Bar 3 — Available consumed : bins_filled / BINS_AVAILABLE
+          Bar colour: green < 50% | yellow 50–75% | orange 75–90% | red ≥ 90%
+      RENDER trip legend: coloured line + trip number + day name
+      RENDER footnote: "Routes: OSRM real road geometry / fallback: straight line"
+
+      SAVE map as "waste_collection_routes_v4.html"
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 10 — MAIN ENTRY POINT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  BEGIN MAIN:
+
+      // Step 1 — Build waste profile from empirical reference
+      profile ← compute_waste_profile()
+
+      // Step 2 — Find optimal store pairing (includes OSRM calls if enabled)
+      //   If USE_OSRM_DISTANCES = TRUE:
+      //     12 OSRM calls made (3 pairings × 2 trips × 2 orderings)
+      //     Geometry cached in each trip dict
+      //     Winner = minimum total weekly real-road km
+      //   If USE_OSRM_DISTANCES = FALSE:
+      //     Uses ROAD_DIST_KM pairwise sums (fully offline)
+      pairing ← find_optimal_pairing()
+
+      // Step 3 — Schedule trips with capacity gate enforcement
+      (schedule, flags, bins_filled, final_fill) ← build_schedule(pairing, profile)
+
+      // Step 4 — Print full console report
+      print_report(profile, schedule, flags, bins_filled, final_fill, pairing)
+
+      // Step 5 — Generate interactive HTML map
+      generate_map(profile, schedule, bins_filled, final_fill)
+
+  END MAIN
+
+================================================================================
+  KEY DESIGN INVARIANTS
+================================================================================
+
+  1. BIN HIERARCHY IS THE SINGLE SOURCE OF TRUTH
+     All kg capacity is derived from {FACILITY_BIN_CAPACITY, BINS_OWNED,
+     BINS_IN_USE, WEIGHT_PER_BIN_KG}. No separate FACILITY_CAPACITY_KG exists.
+
+  2. FACILITY_CURRENT_FILL_KG IS ALWAYS DERIVED
+     = BINS_IN_USE × WEIGHT_PER_BIN_KG  — guarantees kg ↔ bin count consistency.
+
+  3. THREE UTILISATION RATIOS — INDEPENDENT MEANINGS
+     Facility slot util : how much of the physical infrastructure is occupied
+     Owned-bin util     : how much of what you own is in use  (drives alerts)
+     Available consumed : how much of this week's capacity was used
+
+  4. OSRM GEOMETRY CACHED IN OPTIMIZER — NOT IN MAP
+     find_optimal_pairing() makes all OSRM calls and stores geometry in trip.
+     generate_map() reads from cache — zero duplicate API calls.
+
+  5. GRACEFUL DEGRADATION
+     Every OSRM call has a straight-line / manual-distance fallback.
+     Algorithm runs fully offline when USE_OSRM_DISTANCES = FALSE.
+
+  6. GATES ARE SEQUENTIAL AND NON-OVERLAPPING
+     Gate 1 (hard stop) → Gate 2 (partial, proportional by sqft) → Gate 3 (advisory)
+     Gate 1 fires first; if it fires, Gates 2 & 3 are skipped for that trip.
+
+================================================================================
